@@ -4,6 +4,21 @@ A local, browser-based generative outpainting and typography studio built for in
 
 ---
 
+## 📸 Studio Preview
+
+### 📱 Ebook Cover Mode (5:8 • 1600 × 2560)
+![Ebook Cover Workspace](screenshots/ebook_workspace.png)
+
+### 📖 KDP Paperback Full Wrap Mode (Official KDP Template Overlay)
+![Paperback Full Wrap Workspace](screenshots/paperback_workspace.png)
+
+### 🎛️ Sidebar Controls: KDP Calculator, Seam Blending, Back Cover Blurb & Spine Lettering
+| 1. KDP Template & Placement | 2. Seam Blending & Blurb Studio | 3. Spine Lettering & Series Number |
+| :---: | :---: | :---: |
+| ![KDP & Position Controls](screenshots/sidebar_kdp_and_position.png) | ![Export & Blurb Controls](screenshots/sidebar_export_and_blurb.png) | ![Spine Lettering Controls](screenshots/sidebar_spine_lettering.png) |
+
+---
+
 ## 🚀 Quickstart Option A: Let Your AI Set It Up For You
 
 If you use an AI coding assistant (**Antigravity**, **Cursor**, **Claude Code**, **Windsurf**, etc.), just download or clone this repository, open the folder in your AI assistant, and paste this prompt:
