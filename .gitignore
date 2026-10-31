@@ -1,0 +1,18 @@
+# Never commit API keys or secrets
+.env
+.env.local
+
+# Ignore saved user cover projects and uploaded KDP templates
+projects/
+templates/
+*.coverproj.json
+
+# Python virtual environments & cache
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db

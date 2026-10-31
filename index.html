@@ -1,0 +1,3545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Cover Studio • Ebook (5:8) & KDP Paperback Wrap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Lato:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f1117;
+      --bg-panel: #181b24;
+      --bg-card: #222634;
+      --bg-input: #141720;
+      --border: #2e3346;
+      --text-main: #f1f3f9;
+      --text-muted: #9aa1b9;
+      --accent: #7c5cff;
+      --accent-hover: #9175ff;
+      --accent-soft: rgba(124, 92, 255, 0.16);
+      --success: #2dd4bf;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --radius: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    header {
+      height: 58px;
+      background-color: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .mode-switcher {
+      display: flex;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 3px;
+      gap: 4px;
+    }
+
+    .mode-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .mode-btn:hover:not(.active) {
+      color: var(--text-main);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .mode-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(124, 92, 255, 0.35);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .api-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: border-color 0.15s;
+    }
+
+    .api-pill:hover {
+      border-color: var(--accent);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--warning);
+    }
+
+    .status-dot.ok {
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(45, 212, 191, 0.5);
+    }
+
+    /* Main Workspace Layout */
+    .workspace {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Left Sidebar Controls */
+    .sidebar {
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .section-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dropzone {
+      border: 2px dashed #434b66;
+      background: rgba(20, 23, 32, 0.55);
+      border-radius: 8px;
+      padding: 12px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .dropzone-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .dropzone-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .meta-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      background: var(--bg-input);
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .meta-bar strong {
+      color: var(--text-main);
+    }
+
+    /* Buttons & Inputs */
+    .btn-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .btn-group-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 9px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    button:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: #272c3f;
+    }
+
+    button.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: #d6cbff;
+    }
+
+    button:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      padding: 11px 14px;
+      font-size: 13.5px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(124, 92, 255, 0.35);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .btn-refine {
+      background: rgba(45, 212, 191, 0.14);
+      border-color: rgba(45, 212, 191, 0.45);
+      color: #5eead4;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .btn-refine:hover:not(:disabled) {
+      background: rgba(45, 212, 191, 0.25);
+      border-color: var(--success);
+    }
+
+    .btn-success {
+      background: #0d9488;
+      border-color: #14b8a6;
+      color: #fff;
+      padding: 9px 12px;
+      font-size: 12.5px;
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: #0f766e;
+    }
+
+    label {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    select, input[type="text"], input[type="number"], input[type="password"], textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 7px 9px;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 12.5px;
+      outline: none;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 50px;
+      line-height: 1.36;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .control-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .checkbox-row input {
+      accent-color: var(--accent);
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+
+    .refine-box {
+      background: rgba(15, 17, 23, 0.55);
+      border: 1px solid #32384e;
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    /* Right Main Canvas Area */
+    .canvas-stage {
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at center, #181c26 0%, #0d0f14 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stage-toolbar {
+      height: 48px;
+      background: rgba(24, 27, 36, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .stage-tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .stage-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gap-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      color: var(--text-main);
+    }
+
+    .viewport {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+      overflow: hidden;
+      background:
+        conic-gradient(#1f2433 90deg, #161a25 90deg 180deg, #1f2433 180deg 270deg, #161a25 270deg)
+        0 0 / 24px 24px;
+      user-select: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    canvas:active {
+      cursor: grabbing;
+    }
+
+    /* Bottom History & Mix-and-Match Bar */
+    .history-bar {
+      height: 78px;
+      background: rgba(24, 27, 36, 0.92);
+      border-top: 1px solid var(--border);
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+
+    .history-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .history-list {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 4px 8px 4px 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .history-item:hover {
+      border-color: var(--accent);
+    }
+
+    .history-item.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .history-thumb {
+      width: 44px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+      background: #000;
+    }
+
+    .history-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 11px;
+    }
+
+    .history-meta strong {
+      color: var(--text-main);
+    }
+
+    .history-meta span {
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    /* Status & Toast Banner */
+    .status-banner {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(24, 27, 36, 0.96);
+      border: 1px solid var(--border);
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
+      z-index: 20;
+      max-width: 90%;
+      line-height: 1.4;
+      user-select: text;
+    }
+
+    .status-banner.error {
+      border-color: var(--danger);
+      background: rgba(45, 18, 24, 0.96);
+      color: #fecaca;
+    }
+
+    .status-close {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text-main);
+      padding: 3px 8px;
+      font-size: 11px;
+      border-radius: 5px;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+
+    .status-banner.hidden {
+      display: none;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(124, 92, 255, 0.3);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Modal for API Key / Save / Open */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-backdrop.hidden {
+      display: none;
+    }
+
+    .modal {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 460px;
+      max-width: 92vw;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    }
+
+    .modal h3 {
+      font-size: 16px;
+    }
+
+    .modal p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .hint-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header>
+    <div class="brand">
+      <span>Book Cover Studio</span>
+    </div>
+
+    <!-- Mode Switcher: Ebook (5:8) vs Paperback Full Wrap (KDP) -->
+    <div class="mode-switcher">
+      <button class="mode-btn active" id="modeEbookBtn">📱 Ebook Cover (5:8 • 1600×2560)</button>
+      <button class="mode-btn" id="modePaperbackBtn">📖 Paperback Full Wrap (KDP Template)</button>
+    </div>
+
+    <div class="header-actions">
+      <button id="newProjectBtn" title="Clear the current workspace and start a fresh blank cover project">
+        ✨ New Project
+      </button>
+      <button id="saveProjectBtn" disabled title="Save this cover project (including original artwork, settings, and all history attempts) to your projects folder">
+        💾 Save Project
+      </button>
+      <button id="openProjectBtn" title="Open a previously saved cover project from your projects folder or import a .coverproj file">
+        📂 Open Project
+      </button>
+      <button class="api-pill" id="apiKeyBtn" title="Configure or update your OpenRouter API Key">
+        <span class="status-dot" id="apiStatusDot"></span>
+        <span id="apiStatusText">API Key: ************</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <div class="workspace">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+
+      <!-- PAPERBACK ONLY: KDP Template Upload / Calculator -->
+      <div class="section" id="kdpTemplateSection" style="display: none; border-color: rgba(45, 212, 191, 0.45);">
+        <div class="section-title">
+          <span style="color: #5eead4;">0. KDP Paperback Template (.ZIP or .PNG)</span>
+          <span id="kdpSpecBadge" style="color: var(--success);">5"×8" • 224p</span>
+        </div>
+
+        <div class="dropzone" id="kdpDropzone" style="border-color: rgba(45, 212, 191, 0.45); padding: 10px;">
+          <div class="dropzone-title" id="kdpTemplateTitle">Drop KDP Template .ZIP or .PNG here</div>
+          <div class="dropzone-sub">Automatically sets exact Trim, Spine, Bleed & Guide Overlay</div>
+          <input type="file" id="kdpFileInput" accept=".zip,.png,image/png,application/zip" style="display:none" />
+        </div>
+
+        <!-- Built-in KDP Calculator fallback / quick adjuster -->
+        <div style="display: grid; grid-template-columns: 1.2fr 0.9fr 1.2fr; gap: 6px;">
+          <div class="control-row">
+            <label><span>Trim Size</span></label>
+            <select id="kdpTrimSelect">
+              <option value="5x8" selected>5" × 8"</option>
+              <option value="5.25x8">5.25" × 8"</option>
+              <option value="5.5x8.5">5.5" × 8.5"</option>
+              <option value="6x9">6" × 9"</option>
+            </select>
+          </div>
+          <div class="control-row">
+            <label><span>Pages</span></label>
+            <input type="number" id="kdpPagesInput" value="224" min="24" max="828" step="2" />
+          </div>
+          <div class="control-row">
+            <label><span>Paper Type</span></label>
+            <select id="kdpPaperSelect">
+              <option value="BW_CREAM" selected>B&W Cream</option>
+              <option value="BW_WHITE">B&W White</option>
+              <option value="COLOR_STANDARD">Std Color</option>
+              <option value="COLOR_PREMIUM">Prem Color</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="meta-bar" style="font-size:11px;">
+          <span>Spine: <strong id="kdpSpineText">0.56" (168px)</strong></span>
+          <span>Wrap (300 DPI): <strong id="kdpWrapDimText">3243 × 2475</strong></span>
+        </div>
+
+        <div class="control-row">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="checkbox-row">
+              <input type="checkbox" id="showKdpGuideCheck" checked />
+              <label for="showKdpGuideCheck" style="color: var(--text-main); cursor: pointer;">
+                Overlay Official KDP Template Guide
+              </label>
+            </div>
+            <span id="kdpOpacityVal" style="font-size:11px; color:var(--text-muted);">45%</span>
+          </div>
+          <input type="range" id="kdpGuideOpacitySlider" min="10" max="90" value="45" />
+        </div>
+      </div>
+
+      <!-- 1. Image Upload -->
+      <div class="section">
+        <div class="section-title">
+          <span id="step1Title">1. Source Artwork (Leonardo)</span>
+          <span id="sourceRatioBadge" style="color: var(--accent);">None</span>
+        </div>
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-title" id="dropzoneTitle">Drop cover image here or click to browse</div>
+          <div class="dropzone-sub" id="dropzoneSub">Supports 3:4, 4:5, or existing 1600×2560 covers</div>
+          <input type="file" id="fileInput" accept="image/*" style="display:none" />
+        </div>
+        <div class="meta-bar">
+          <span>Source: <strong id="origDimText">—</strong></span>
+          <span>Target: <strong id="targetDimText">1600 × 2560</strong></span>
+        </div>
+      </div>
+
+      <!-- 2. Positioning & Expansion Direction -->
+      <div class="section">
+        <div class="section-title">
+          <span id="step2Title">2. Position & Expansion Zone</span>
+        </div>
+
+        <!-- Ebook Position Presets -->
+        <div class="btn-group" id="ebookPosGroup">
+          <button id="posExpandTopBtn" title="Snap image to bottom so AI expands the top (headroom / title space)">
+            ↑ Expand Top
+          </button>
+          <button id="posExpandBothBtn" class="active" title="Center image vertically and expand both top and bottom evenly">
+            ↕ Expand Both
+          </button>
+          <button id="posExpandBottomBtn" title="Snap image to top so AI expands the bottom (author name / legs / ground)">
+            ↓ Expand Bottom
+          </button>
+        </div>
+
+        <!-- Paperback Position Presets -->
+        <div class="btn-group-2" id="paperbackPosGroup" style="display:none;">
+          <button id="posSnapRightTrimBtn" class="active" title="Fit your Ebook cover cleanly to the Right-Side Front Cover (from the right Spine fold to the right Bleed edge)">
+            ⇥ Fit Front Cover (Right)
+          </button>
+          <button id="posSnapRightFullBleedBtn" title="Scale Front Cover slightly larger so top, bottom, and right bleed have full coverage">
+            ⤢ Fill Front + Bleed
+          </button>
+        </div>
+
+        <div class="control-row" style="margin-top: 2px;">
+          <div class="btn-group-2">
+            <button id="scaleFitWidthBtn" class="active">
+              Auto-Fit
+            </button>
+            <button id="scaleContainBtn">
+              Custom Scale / Zoom
+            </button>
+          </div>
+        </div>
+
+        <div class="control-row" id="customScaleRow" style="display: none;">
+          <label>
+            <span>Zoom / Scale</span>
+            <span id="scaleValLabel">100%</span>
+          </label>
+          <input type="range" id="scaleSlider" min="40" max="150" value="100" />
+        </div>
+
+        <!-- Fine Nudge Controls for rescuing text near KDP pink zones -->
+        <div class="control-row" style="margin-top: 2px;">
+          <label>
+            <span>Fine-Tune Position Nudge (Rescue Text from Pink Zone)</span>
+          </label>
+          <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px;">
+            <button id="nudgeLeftBtn" title="Move cover Left (-15px)">← Left</button>
+            <button id="nudgeUpBtn" title="Move cover Up (-15px)">↑ Up</button>
+            <button id="nudgeDownBtn" title="Move cover Down (+15px)">↓ Down</button>
+            <button id="nudgeRightBtn" title="Move cover Right (+15px)">→ Right</button>
+            <button id="shrinkSafeBtn" title="Shrink cover by 2% around its center to pull text inside KDP safe zone">🔍 -2%</button>
+          </div>
+        </div>
+        <div class="checkbox-row" id="ebookGuidesRow">
+          <input type="checkbox" id="showGuidesCheck" checked />
+          <label for="showGuidesCheck" style="color: var(--text-main); cursor: pointer;">
+            Show Title / Author Typography Safe-Zone Guides
+          </label>
+        </div>
+      </div>
+
+      <!-- 3. AI Model, Prompts & Region Lock -->
+      <div class="section">
+        <div class="section-title">
+          <span>3. AI Instructions & Fine-Tuning</span>
+        </div>
+
+        <div class="control-row">
+          <label for="modelSelect"><span>OpenRouter Model</span></label>
+          <select id="modelSelect">
+            <option value="openai/gpt-image-2.5-sunburst" selected>GPT Image 2.5 Sunburst (openai/gpt-image-2.5-sunburst)</option>
+            <option value="openai/gpt-image-2.5-flare">GPT Image 2.5 Flare (openai/gpt-image-2.5-flare)</option>
+            <option value="openai/gpt-image-1">GPT Image 1 (openai/gpt-image-1)</option>
+            <option value="black-forest-labs/flux.2-pro">FLUX.2 Pro (black-forest-labs/flux.2-pro)</option>
+            <option value="bytedance-seed/seedream-4.5">Seedream 4.5 (bytedance-seed/seedream-4.5)</option>
+            <option value="custom">Custom OpenRouter Model ID...</option>
+          </select>
+        </div>
+
+        <div class="control-row" id="customModelRow" style="display:none;">
+          <label for="customModelInput"><span>Custom Model ID</span></label>
+          <input type="text" id="customModelInput" placeholder="e.g. openai/gpt-image-2.5-sunburst" />
+        </div>
+
+        <div class="control-row" id="topPromptRow">
+          <label for="topPromptInput">
+            <span id="topPromptLabel">↑ Top Area Instructions (Optional)</span>
+          </label>
+          <textarea id="topPromptInput" placeholder="e.g. Extend the dark stormy sky, tree branches, or cathedral ceiling upward..."></textarea>
+        </div>
+
+        <div class="control-row" id="bottomPromptRow">
+          <label for="bottomPromptInput">
+            <span id="bottomPromptLabel">↓ Bottom Area Instructions (Optional)</span>
+          </label>
+          <textarea id="bottomPromptInput" placeholder="e.g. Continue the flowing velvet dress and stone floor downward, no extra objects..."></textarea>
+        </div>
+
+        <button class="btn-primary" id="generateBtn" disabled>
+          ✨ Expand All Unfilled Zones
+        </button>
+
+        <!-- Partial Re-Roll / Fine-Tune Box (Ebook Mode) -->
+        <div class="refine-box" id="partialRedoBox">
+          <div style="font-size:11.5px; font-weight:700; color:#5eead4; display:flex; justify-content:space-between;">
+            <span>🎯 Partial Fine-Tune (Keep Good Half!)</span>
+          </div>
+          <div class="btn-group-2">
+            <button class="btn-refine" id="redoBottomOnlyBtn" disabled title="Keeps your current Top expansion locked and only regenerates the Bottom!">
+              🔒 Keep Top • Redo Bottom
+            </button>
+            <button class="btn-refine" id="redoTopOnlyBtn" disabled title="Keeps your current Bottom expansion locked and only regenerates the Top!">
+              🔒 Keep Bottom • Redo Top
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Blending & Export -->
+      <div class="section">
+        <div class="section-title">
+          <span>4. Seam Blending & Export</span>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="preserveOriginalCheck" checked />
+          <label for="preserveOriginalCheck" style="color: var(--text-main); cursor: pointer;">
+            Lock original cover pixels (composite original over AI)
+          </label>
+        </div>
+
+        <div class="control-row" id="featherControlRow">
+          <label>
+            <span>Seam Feathering (Smooth Transition)</span>
+            <span id="featherValLabel">48 px</span>
+          </label>
+          <input type="range" id="featherSlider" min="0" max="200" value="48" />
+        </div>
+
+        <div class="control-row" id="aiAlignRow" style="display:none;">
+          <label>
+            <span id="aiAlignLabel">AI Layer Fine-Tune Offset</span>
+            <span id="aiOffsetLabel">0 px</span>
+          </label>
+          <input type="range" id="aiOffsetSlider" min="-150" max="150" value="0" />
+        </div>
+
+        <div class="btn-group-2" style="margin-top: 4px;">
+          <button class="btn-success" id="downloadPngBtn" disabled>
+            ⬇ Download PNG
+          </button>
+          <button class="btn-success" id="downloadJpgBtn" disabled style="background:#2563eb; border-color:#3b82f6;">
+            ⬇ Download JPG
+          </button>
+        </div>
+        <div class="btn-group-2" style="margin-top: 4px;">
+          <button id="downloadRawAiBtn" disabled style="border-color:#4b5563;">
+            ⬇ Raw AI (PNG)
+          </button>
+          <button id="downloadKdpPdfBtn" disabled style="display:none; background:#7c3aed; border-color:#8b5cf6; color:#fff;">
+            🖨 Download Print PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. PAPERBACK ONLY: Back Cover Blurb & Spine Typography Studio -->
+      <div class="section" id="paperbackTextSection" style="display: none; border-color: rgba(124, 92, 255, 0.45);">
+        <div class="section-title">
+          <span style="color: #d6cbff;">5. Back Cover Blurb & Spine Text</span>
+        </div>
+
+        <div class="control-row">
+          <label for="backHookInput"><span>Back Cover Hook / Tagline (Bold/Italic Top)</span></label>
+          <textarea id="backHookInput" style="min-height: 44px;" placeholder="e.g. Some secrets were never meant to survive the night..."></textarea>
+        </div>
+
+        <div class="control-row">
+          <label for="backBlurbInput"><span>Back Cover Blurb Copy (Use blank line for new paragraph)</span></label>
+          <textarea id="backBlurbInput" style="min-height: 105px;" placeholder="Paste your back cover blurb here..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 6px;">
+          <div class="control-row">
+            <label><span>Font Family</span></label>
+            <select id="blurbFontSelect">
+              <option value="'EB Garamond', Georgia, serif" selected>EB Garamond (Classic Book)</option>
+              <option value="'Cormorant Garamond', Georgia, serif">Cormorant Garamond</option>
+              <option value="'Libre Baskerville', Georgia, serif">Libre Baskerville</option>
+              <option value="'Playfair Display', Georgia, serif">Playfair Display</option>
+              <option value="'Cinzel', Georgia, serif">Cinzel (Display/Fantasy)</option>
+              <option value="'Lato', sans-serif">Lato (Clean Sans)</option>
+              <option value="'Montserrat', sans-serif">Montserrat (Modern Sans)</option>
+            </select>
+          </div>
+          <div class="control-row">
+            <label><span>Alignment</span></label>
+            <select id="blurbAlignSelect">
+              <option value="left" selected>Left</option>
+              <option value="center">Centered</option>
+              <option value="justify">Justified</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+          <div class="control-row">
+            <label><span>Hook Color</span></label>
+            <input type="color" id="hookColorInput" value="#fde68a" style="height: 31px; width: 100%; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; cursor: pointer;" />
+          </div>
+          <div class="control-row">
+            <label><span>Blurb Color</span></label>
+            <input type="color" id="blurbColorInput" value="#f8fafc" style="height: 31px; width: 100%; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; cursor: pointer;" />
+          </div>
+          <div class="control-row">
+            <label><span>Vignette Color</span></label>
+            <input type="color" id="scrimColorInput" value="#080a10" style="height: 31px; width: 100%; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; cursor: pointer;" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="control-row">
+            <label><span>Hook Font Size</span><span id="hookSizeVal">42 px</span></label>
+            <input type="range" id="hookSizeSlider" min="26" max="68" value="42" />
+          </div>
+          <div class="control-row">
+            <label><span>Blurb Font Size</span><span id="blurbSizeVal">34 px</span></label>
+            <input type="range" id="blurbSizeSlider" min="22" max="54" value="34" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="control-row">
+            <label><span>Line Spacing</span><span id="lineHeightVal">1.40×</span></label>
+            <input type="range" id="lineHeightSlider" min="115" max="180" value="140" />
+          </div>
+          <div class="control-row">
+            <label><span>Vertical Position (Y)</span><span id="blurbYVal">230 px</span></label>
+            <input type="range" id="blurbYSlider" min="130" max="900" value="230" />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="control-row">
+            <label><span>Readability Vignette</span><span id="scrimVal">55%</span></label>
+            <input type="range" id="scrimOpacitySlider" min="0" max="92" value="55" />
+          </div>
+          <div class="control-row">
+            <label><span>Text Drop Shadow</span><span id="shadowVal">14 px</span></label>
+            <input type="range" id="textShadowSlider" min="0" max="32" value="14" />
+          </div>
+        </div>
+
+        <div class="refine-box" style="margin-top: 2px;">
+          <div style="font-size:11.5px; font-weight:700; color:#d6cbff;">Spine Lettering (Optional • Auto-Centered Horizontally on Spine)</div>
+          <div style="display: grid; grid-template-columns: 1fr 54px; gap: 6px;">
+            <div class="control-row">
+              <label><span>Spine Book Title</span></label>
+              <input type="text" id="spineTitleInput" placeholder="Book Title" />
+            </div>
+            <div class="control-row">
+              <label><span>Color</span></label>
+              <input type="color" id="spineTitleColorInput" value="#fde68a" style="height: 31px; width: 100%; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; cursor: pointer;" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div class="control-row">
+              <label><span>Title Position (Up/Down)</span><span id="spineTitlePosVal">32%</span></label>
+              <input type="range" id="spineTitlePosSlider" min="5" max="95" value="32" />
+            </div>
+            <div class="control-row">
+              <label><span>Title Font Size</span><span id="spineSizeVal">38 px</span></label>
+              <input type="range" id="spineSizeSlider" min="18" max="160" value="38" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 54px; gap: 6px; margin-top: 2px;">
+            <div class="control-row">
+              <label><span>Spine Author Name</span></label>
+              <input type="text" id="spineAuthorInput" placeholder="Author Name" />
+            </div>
+            <div class="control-row">
+              <label><span>Color</span></label>
+              <input type="color" id="spineAuthorColorInput" value="#f8fafc" style="height: 31px; width: 100%; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; cursor: pointer;" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div class="control-row">
+              <label><span>Author Position (Up/Down)</span><span id="spineAuthorPosVal">82%</span></label>
+              <input type="range" id="spineAuthorPosSlider" min="5" max="95" value="82" />
+            </div>
+            <div class="control-row">
+              <label><span>Author Font Size</span><span id="spineAuthorSizeVal">32 px</span></label>
+              <input type="range" id="spineAuthorSizeSlider" min="18" max="160" value="32" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 54px; gap: 6px; margin-top: 2px;">
+            <div class="control-row">
+              <label><span>Spine Series Number (Upright/Vertical)</span></label>
+              <input type="text" id="spineNumberInput" placeholder="e.g. 1, II, 01" />
+            </div>
+            <div class="control-row">
+              <label><span>Color</span></label>
+              <input type="color" id="spineNumberColorInput" value="#fde68a" style="height: 31px; width: 100%; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; cursor: pointer;" />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div class="control-row">
+              <label><span>Number Position (Up/Down)</span><span id="spineNumberPosVal">93%</span></label>
+              <input type="range" id="spineNumberPosSlider" min="3" max="97" value="93" />
+            </div>
+            <div class="control-row">
+              <label><span>Number Font Size</span><span id="spineNumberSizeVal">56 px</span></label>
+              <input type="range" id="spineNumberSizeSlider" min="18" max="220" value="56" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Right Stage -->
+    <main class="canvas-stage">
+      <div class="stage-toolbar">
+        <div class="stage-tabs">
+          <button id="viewLayoutBtn" class="active">Layout & Guides</button>
+          <button id="viewResultBtn" disabled>Expanded Cover Result</button>
+          <button id="viewRawAiBtn" disabled>Raw AI Layer</button>
+          <button id="quickToggleGuidesBtn" class="active" title="Quickly show or hide the template / typography guide lines over the canvas">
+            👁 Guides: ON
+          </button>
+        </div>
+        <div class="stage-info">
+          <span class="gap-pill" id="gapSummaryPill">Expand Top: 0px • Expand Bottom: 0px</span>
+          <span style="font-size:11.5px;">Drag cover on canvas to fine-tune placement</span>
+        </div>
+      </div>
+
+      <div class="viewport" id="viewport">
+        <div class="canvas-wrapper" id="canvasWrapper">
+          <canvas id="coverCanvas" width="1600" height="2560"></canvas>
+        </div>
+
+        <div class="status-banner hidden" id="statusBanner">
+          <div class="spinner" id="statusSpinner"></div>
+          <span id="statusMessage">Generating expansion...</span>
+          <button class="status-close" id="statusCloseBtn" style="display:none;">Dismiss</button>
+        </div>
+      </div>
+
+      <!-- History Strip for Comparing / Restoring Attempts -->
+      <div class="history-bar">
+        <span class="history-label">Attempts History:</span>
+        <div class="history-list" id="historyList">
+          <span class="hint-text">Your generated versions will appear here so you can compare or restore attempts.</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- API Key Settings Modal -->
+  <div class="modal-backdrop hidden" id="apiModal">
+    <div class="modal">
+      <h3>OpenRouter API Key Settings</h3>
+      <p>
+        Paste a new OpenRouter API key here anytime to save and update it immediately.
+      </p>
+      <div class="control-row">
+        <label for="newApiKeyInput"><span>OpenRouter API Key</span></label>
+        <input type="password" id="newApiKeyInput" placeholder="sk-or-v1-..." />
+      </div>
+      <div class="modal-actions">
+        <button id="closeModalBtn">Cancel</button>
+        <button class="btn-primary" id="saveApiKeyBtn" style="padding: 8px 16px; font-size: 13px;">Save Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Project Modal -->
+  <div class="modal-backdrop hidden" id="saveProjectModal">
+    <div class="modal">
+      <h3>💾 Save Cover Project</h3>
+      <p>
+        Saves your original artwork, exact canvas positioning, KDP template, prompts, and <strong>all generated history attempts</strong> into a dedicated subfolder inside your <code>projects/</code> directory.
+      </p>
+      <div class="control-row">
+        <label for="projectNameInput"><span>Project / Book Name</span></label>
+        <input type="text" id="projectNameInput" placeholder="e.g. Midnight_Shadow_Paperback" />
+      </div>
+      <div class="modal-actions" style="justify-content: space-between;">
+        <button id="exportProjectFileBtn" title="Download a portable single-file .coverproj.json backup to save anywhere on your computer">
+          ⬇ Export .coverproj File
+        </button>
+        <div style="display:flex; gap:8px;">
+          <button id="closeSaveModalBtn">Cancel</button>
+          <button class="btn-primary" id="confirmSaveProjectBtn" style="padding: 8px 16px; font-size: 13px;">Save to Projects Folder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Open Project Modal -->
+  <div class="modal-backdrop hidden" id="openProjectModal">
+    <div class="modal" style="width: 560px;">
+      <h3>📂 Open Saved Cover Project</h3>
+      <p>
+        Select a saved Ebook or Paperback project from your <code>projects/</code> folder below, or import a <code>.coverproj.json</code> file:
+      </p>
+      <div id="projectsListContainer" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 4px 0;">
+        <span class="hint-text">Loading saved projects...</span>
+      </div>
+      <div class="modal-actions" style="justify-content: space-between;">
+        <div>
+          <button id="importProjectFileBtn">📁 Import .coverproj File from Disk...</button>
+          <input type="file" id="importProjectInput" accept=".json,.coverproj" style="display:none" />
+        </div>
+        <button id="closeOpenModalBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dynamic Canvas Dimensions (Changes based on Ebook 1600x2560 vs Paperback KDP Wrap)
+    let appMode = "ebook"; // 'ebook' | 'paperback'
+    let TARGET_W = 1600;
+    let TARGET_H = 2560;
+
+    // Default KDP Paperback Spec (5"x8", 224 pages, B&W Cream)
+    let kdpSpec = {
+      name: "PAPERBACK_5.000x8.000_224_BW_CREAM",
+      work_w: 3243,
+      work_h: 2475,
+      native_w: 6483,
+      native_h: 4950,
+      trim_w_in: 5.0,
+      trim_h_in: 8.0,
+      pages: 224,
+      paper_code: "BW_CREAM",
+      bleed_in: 0.125,
+      spine_w_in: 0.56,
+      total_w_in: 10.81,
+      total_h_in: 8.25,
+      bleed_px: 38,
+      trim_w_px: 1500,
+      trim_h_px: 2400,
+      spine_w_px: 167,
+      spine_left_x: 1538,
+      spine_right_x: 1705
+    };
+    let kdpGuideImg = null;
+
+    const KDP_MULTIPLIERS = {
+      BW_CREAM: 0.0025,
+      BW_WHITE: 0.002252,
+      COLOR_STANDARD: 0.002252,
+      COLOR_PREMIUM: 0.002347
+    };
+
+    // Elements
+    const canvas = document.getElementById("coverCanvas");
+    const ctx = canvas.getContext("2d");
+    const canvasWrapper = document.getElementById("canvasWrapper");
+    const viewport = document.getElementById("viewport");
+
+    const modeEbookBtn = document.getElementById("modeEbookBtn");
+    const modePaperbackBtn = document.getElementById("modePaperbackBtn");
+    const kdpTemplateSection = document.getElementById("kdpTemplateSection");
+    const kdpSpecBadge = document.getElementById("kdpSpecBadge");
+    const kdpDropzone = document.getElementById("kdpDropzone");
+    const kdpTemplateTitle = document.getElementById("kdpTemplateTitle");
+    const kdpFileInput = document.getElementById("kdpFileInput");
+    const kdpTrimSelect = document.getElementById("kdpTrimSelect");
+    const kdpPagesInput = document.getElementById("kdpPagesInput");
+    const kdpPaperSelect = document.getElementById("kdpPaperSelect");
+    const kdpSpineText = document.getElementById("kdpSpineText");
+    const kdpWrapDimText = document.getElementById("kdpWrapDimText");
+    const showKdpGuideCheck = document.getElementById("showKdpGuideCheck");
+    const kdpGuideOpacitySlider = document.getElementById("kdpGuideOpacitySlider");
+    const kdpOpacityVal = document.getElementById("kdpOpacityVal");
+
+    const step1Title = document.getElementById("step1Title");
+    const dropzone = document.getElementById("dropzone");
+    const dropzoneTitle = document.getElementById("dropzoneTitle");
+    const dropzoneSub = document.getElementById("dropzoneSub");
+    const fileInput = document.getElementById("fileInput");
+    const origDimText = document.getElementById("origDimText");
+    const targetDimText = document.getElementById("targetDimText");
+    const sourceRatioBadge = document.getElementById("sourceRatioBadge");
+    const gapSummaryPill = document.getElementById("gapSummaryPill");
+
+    const ebookPosGroup = document.getElementById("ebookPosGroup");
+    const paperbackPosGroup = document.getElementById("paperbackPosGroup");
+    const posExpandTopBtn = document.getElementById("posExpandTopBtn");
+    const posExpandBothBtn = document.getElementById("posExpandBothBtn");
+    const posExpandBottomBtn = document.getElementById("posExpandBottomBtn");
+    const posSnapRightTrimBtn = document.getElementById("posSnapRightTrimBtn");
+    const posSnapRightFullBleedBtn = document.getElementById("posSnapRightFullBleedBtn");
+
+    const scaleFitWidthBtn = document.getElementById("scaleFitWidthBtn");
+    const scaleContainBtn = document.getElementById("scaleContainBtn");
+    const customScaleRow = document.getElementById("customScaleRow");
+    const scaleSlider = document.getElementById("scaleSlider");
+    const scaleValLabel = document.getElementById("scaleValLabel");
+    const nudgeLeftBtn = document.getElementById("nudgeLeftBtn");
+    const nudgeUpBtn = document.getElementById("nudgeUpBtn");
+    const nudgeDownBtn = document.getElementById("nudgeDownBtn");
+    const nudgeRightBtn = document.getElementById("nudgeRightBtn");
+    const shrinkSafeBtn = document.getElementById("shrinkSafeBtn");
+    const ebookGuidesRow = document.getElementById("ebookGuidesRow");
+    const showGuidesCheck = document.getElementById("showGuidesCheck");
+
+    const modelSelect = document.getElementById("modelSelect");
+    const customModelRow = document.getElementById("customModelRow");
+    const customModelInput = document.getElementById("customModelInput");
+    const topPromptRow = document.getElementById("topPromptRow");
+    const topPromptLabel = document.getElementById("topPromptLabel");
+    const topPromptInput = document.getElementById("topPromptInput");
+    const bottomPromptRow = document.getElementById("bottomPromptRow");
+    const bottomPromptLabel = document.getElementById("bottomPromptLabel");
+    const bottomPromptInput = document.getElementById("bottomPromptInput");
+    const generateBtn = document.getElementById("generateBtn");
+    const partialRedoBox = document.getElementById("partialRedoBox");
+    const redoBottomOnlyBtn = document.getElementById("redoBottomOnlyBtn");
+    const redoTopOnlyBtn = document.getElementById("redoTopOnlyBtn");
+
+    const preserveOriginalCheck = document.getElementById("preserveOriginalCheck");
+    const featherControlRow = document.getElementById("featherControlRow");
+    const featherSlider = document.getElementById("featherSlider");
+    const featherValLabel = document.getElementById("featherValLabel");
+    const aiAlignRow = document.getElementById("aiAlignRow");
+    const aiAlignLabel = document.getElementById("aiAlignLabel");
+    const aiOffsetSlider = document.getElementById("aiOffsetSlider");
+    const aiOffsetLabel = document.getElementById("aiOffsetLabel");
+
+    const downloadPngBtn = document.getElementById("downloadPngBtn");
+    const downloadJpgBtn = document.getElementById("downloadJpgBtn");
+    const downloadRawAiBtn = document.getElementById("downloadRawAiBtn");
+    const downloadKdpPdfBtn = document.getElementById("downloadKdpPdfBtn");
+
+    const paperbackTextSection = document.getElementById("paperbackTextSection");
+    const backHookInput = document.getElementById("backHookInput");
+    const backBlurbInput = document.getElementById("backBlurbInput");
+    const blurbFontSelect = document.getElementById("blurbFontSelect");
+    const blurbAlignSelect = document.getElementById("blurbAlignSelect");
+    const hookColorInput = document.getElementById("hookColorInput");
+    const blurbColorInput = document.getElementById("blurbColorInput");
+    const scrimColorInput = document.getElementById("scrimColorInput");
+    const hookSizeSlider = document.getElementById("hookSizeSlider");
+    const hookSizeVal = document.getElementById("hookSizeVal");
+    const blurbSizeSlider = document.getElementById("blurbSizeSlider");
+    const blurbSizeVal = document.getElementById("blurbSizeVal");
+    const lineHeightSlider = document.getElementById("lineHeightSlider");
+    const lineHeightVal = document.getElementById("lineHeightVal");
+    const blurbYSlider = document.getElementById("blurbYSlider");
+    const blurbYVal = document.getElementById("blurbYVal");
+    const scrimOpacitySlider = document.getElementById("scrimOpacitySlider");
+    const scrimVal = document.getElementById("scrimVal");
+    const textShadowSlider = document.getElementById("textShadowSlider");
+    const shadowVal = document.getElementById("shadowVal");
+    const spineTitleInput = document.getElementById("spineTitleInput");
+    const spineTitleColorInput = document.getElementById("spineTitleColorInput");
+    const spineTitlePosSlider = document.getElementById("spineTitlePosSlider");
+    const spineTitlePosVal = document.getElementById("spineTitlePosVal");
+    const spineSizeSlider = document.getElementById("spineSizeSlider");
+    const spineSizeVal = document.getElementById("spineSizeVal");
+    const spineAuthorInput = document.getElementById("spineAuthorInput");
+    const spineAuthorColorInput = document.getElementById("spineAuthorColorInput");
+    const spineAuthorPosSlider = document.getElementById("spineAuthorPosSlider");
+    const spineAuthorPosVal = document.getElementById("spineAuthorPosVal");
+    const spineAuthorSizeSlider = document.getElementById("spineAuthorSizeSlider");
+    const spineAuthorSizeVal = document.getElementById("spineAuthorSizeVal");
+    const spineNumberInput = document.getElementById("spineNumberInput");
+    const spineNumberColorInput = document.getElementById("spineNumberColorInput");
+    const spineNumberPosSlider = document.getElementById("spineNumberPosSlider");
+    const spineNumberPosVal = document.getElementById("spineNumberPosVal");
+    const spineNumberSizeSlider = document.getElementById("spineNumberSizeSlider");
+    const spineNumberSizeVal = document.getElementById("spineNumberSizeVal");
+
+    const viewLayoutBtn = document.getElementById("viewLayoutBtn");
+    const viewResultBtn = document.getElementById("viewResultBtn");
+    const viewRawAiBtn = document.getElementById("viewRawAiBtn");
+    const quickToggleGuidesBtn = document.getElementById("quickToggleGuidesBtn");
+    const historyList = document.getElementById("historyList");
+
+    const statusBanner = document.getElementById("statusBanner");
+    const statusSpinner = document.getElementById("statusSpinner");
+    const statusMessage = document.getElementById("statusMessage");
+    const statusCloseBtn = document.getElementById("statusCloseBtn");
+    let statusTimeoutId = null;
+
+    statusCloseBtn.addEventListener("click", () => {
+      statusBanner.classList.add("hidden");
+    });
+
+    const apiKeyBtn = document.getElementById("apiKeyBtn");
+    const apiStatusDot = document.getElementById("apiStatusDot");
+    const apiStatusText = document.getElementById("apiStatusText");
+    const apiModal = document.getElementById("apiModal");
+    const newApiKeyInput = document.getElementById("newApiKeyInput");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const saveApiKeyBtn = document.getElementById("saveApiKeyBtn");
+
+    const newProjectBtn = document.getElementById("newProjectBtn");
+    const saveProjectBtn = document.getElementById("saveProjectBtn");
+    const openProjectBtn = document.getElementById("openProjectBtn");
+    const saveProjectModal = document.getElementById("saveProjectModal");
+    const openProjectModal = document.getElementById("openProjectModal");
+    const projectNameInput = document.getElementById("projectNameInput");
+    const closeSaveModalBtn = document.getElementById("closeSaveModalBtn");
+    const confirmSaveProjectBtn = document.getElementById("confirmSaveProjectBtn");
+    const exportProjectFileBtn = document.getElementById("exportProjectFileBtn");
+    const projectsListContainer = document.getElementById("projectsListContainer");
+    const closeOpenModalBtn = document.getElementById("closeOpenModalBtn");
+    const importProjectFileBtn = document.getElementById("importProjectFileBtn");
+    const importProjectInput = document.getElementById("importProjectInput");
+
+    // State
+    let sourceImg = null;
+    let sourceFileName = "cover";
+    let imgX = 0;
+    let imgY = 0;
+    let imgW = TARGET_W;
+    let imgH = TARGET_H;
+    let baseFitScale = 1;
+    let customZoom = 100;
+    let activePosPreset = "both";
+    let viewMode = "layout";
+
+    let aiTopLayerImg = null;
+    let aiBottomLayerImg = null;
+    let aiVerticalOffset = 0;
+
+    let historyItems = [];
+    let activeHistoryIndex = -1;
+
+    // Dragging state
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragInitImgX = 0;
+    let dragInitImgY = 0;
+
+    function fitViewport() {
+      const rect = viewport.getBoundingClientRect();
+      const availW = Math.max(200, rect.width - 36);
+      const availH = Math.max(200, rect.height - 36);
+      const targetRatio = TARGET_W / TARGET_H;
+
+      let displayH = availH;
+      let displayW = displayH * targetRatio;
+      if (displayW > availW) {
+        displayW = availW;
+        displayH = displayW / targetRatio;
+      }
+      canvasWrapper.style.width = `${Math.max(180, Math.floor(displayW))}px`;
+      canvasWrapper.style.height = `${Math.max(180, Math.floor(displayH))}px`;
+    }
+
+    window.addEventListener("resize", fitViewport);
+
+    // Switch between Ebook (5:8) and Paperback Full Wrap (KDP)
+    function setAppMode(newMode) {
+      appMode = newMode;
+      modeEbookBtn.classList.toggle("active", appMode === "ebook");
+      modePaperbackBtn.classList.toggle("active", appMode === "paperback");
+
+      if (appMode === "ebook") {
+        TARGET_W = 1600;
+        TARGET_H = 2560;
+        kdpTemplateSection.style.display = "none";
+        ebookPosGroup.style.display = "grid";
+        paperbackPosGroup.style.display = "none";
+        ebookGuidesRow.style.display = "flex";
+        step1Title.textContent = "1. Source Artwork (Leonardo)";
+        dropzoneTitle.textContent = "Drop cover image here or click to browse";
+        dropzoneSub.textContent = "Supports 3:4, 4:5, or existing 1600×2560 covers";
+        topPromptLabel.textContent = "↑ Top Area Instructions (Optional)";
+        topPromptInput.placeholder = "e.g. Extend the dark stormy sky, tree branches, or cathedral ceiling upward...";
+        bottomPromptRow.style.display = "flex";
+        partialRedoBox.style.display = "flex";
+        generateBtn.textContent = "✨ Expand All Unfilled Zones";
+        downloadKdpPdfBtn.style.display = "none";
+        paperbackTextSection.style.display = "none";
+        aiAlignLabel.textContent = "AI Layer Vertical Fine-Tune";
+      } else {
+        TARGET_W = kdpSpec.work_w;
+        TARGET_H = kdpSpec.work_h;
+        kdpTemplateSection.style.display = "flex";
+        ebookPosGroup.style.display = "none";
+        paperbackPosGroup.style.display = "grid";
+        ebookGuidesRow.style.display = "none";
+        step1Title.textContent = "1. Front Cover Artwork (Places on Right Side)";
+        dropzoneTitle.textContent = "Drop your Ebook / Front Cover here";
+        dropzoneSub.textContent = "Automatically snaps to the Right-Side Front Cover area";
+        topPromptLabel.textContent = "← Spine & Back Cover Instructions (Optional)";
+        topPromptInput.placeholder = "e.g. Continue the moody forest background and lighting seamlessly across the spine and left back cover, keeping room for back blurb text...";
+        bottomPromptRow.style.display = "none";
+        partialRedoBox.style.display = "none";
+        generateBtn.textContent = "✨ Generate Spine & Back Cover (Left Side)";
+        downloadKdpPdfBtn.style.display = "inline-flex";
+        paperbackTextSection.style.display = "flex";
+        aiAlignLabel.textContent = "AI Layer Horizontal Fine-Tune";
+      }
+
+      canvas.width = TARGET_W;
+      canvas.height = TARGET_H;
+      targetDimText.textContent = `${TARGET_W} × ${TARGET_H}`;
+      syncQuickGuideButton();
+      fitViewport();
+
+      if (sourceImg) {
+        if (appMode === "ebook") {
+          baseFitScale = TARGET_W / sourceImg.width;
+          applyScaleAndPosition("both");
+        } else {
+          snapFrontCoverPaperback("right_trim");
+        }
+      } else {
+        updateGapSummary();
+        renderCanvas();
+      }
+    }
+
+    modeEbookBtn.addEventListener("click", () => setAppMode("ebook"));
+    modePaperbackBtn.addEventListener("click", () => setAppMode("paperback"));
+
+    // Load default KDP template from server on startup
+    async function loadDefaultKdpTemplate() {
+      try {
+        const res = await fetch("/api/default_template");
+        const data = await res.json();
+        if (data.has_template && data.template) {
+          await applyKdpTemplateMeta(data.template);
+        }
+      } catch (e) {
+        console.warn("Could not load default KDP template:", e);
+      }
+    }
+
+    async function applyKdpTemplateMeta(meta) {
+      kdpSpec = meta;
+      kdpSpecBadge.textContent = `${meta.trim_w_in}"×${meta.trim_h_in}" • ${meta.pages}p`;
+      kdpTemplateTitle.textContent = `Loaded: ${meta.name}`;
+      kdpSpineText.textContent = `${meta.spine_w_in}" (${meta.spine_w_px}px)`;
+      kdpWrapDimText.textContent = `${meta.work_w} × ${meta.work_h}`;
+
+      const trimKey = `${Number(meta.trim_w_in)}x${Number(meta.trim_h_in)}`;
+      if ([...kdpTrimSelect.options].some(o => o.value === trimKey)) {
+        kdpTrimSelect.value = trimKey;
+      }
+      kdpPagesInput.value = meta.pages;
+      if ([...kdpPaperSelect.options].some(o => o.value === meta.paper_code)) {
+        kdpPaperSelect.value = meta.paper_code;
+      }
+
+      if (meta.guide_data_url) {
+        const gImg = new Image();
+        await new Promise((resolve) => {
+          gImg.onload = resolve;
+          gImg.onerror = resolve;
+          gImg.src = meta.guide_data_url;
+        });
+        kdpGuideImg = gImg;
+      }
+
+      if (appMode === "paperback") {
+        const oldW = TARGET_W;
+        const oldH = TARGET_H;
+        TARGET_W = kdpSpec.work_w;
+        TARGET_H = kdpSpec.work_h;
+        canvas.width = TARGET_W;
+        canvas.height = TARGET_H;
+        targetDimText.textContent = `${TARGET_W} × ${TARGET_H}`;
+        fitViewport();
+        if (sourceImg) {
+          if (imgW > 0 && oldH === TARGET_H) {
+            // Preserve custom front-cover placement relative to the right edge when spine/page count changes
+            imgX = Math.round(imgX + (TARGET_W - oldW));
+            updateGapSummary();
+            renderCanvas();
+          } else {
+            snapFrontCoverPaperback("right_trim");
+          }
+        } else {
+          renderCanvas();
+        }
+      }
+    }
+
+    // Recalculate KDP dimensions when user changes Trim / Pages / Paper Type in the UI calculator
+    function recalculateKdpFromInputs() {
+      const [tw, th] = kdpTrimSelect.value.split("x").map(Number);
+      const pages = Math.max(24, parseInt(kdpPagesInput.value, 10) || 224);
+      const paper = kdpPaperSelect.value;
+      const mult = KDP_MULTIPLIERS[paper] || 0.0025;
+      const bleed_in = 0.125;
+      const spine_w_in = Number((pages * mult).toFixed(4));
+      const total_w_in = Number((2 * tw + spine_w_in + 2 * bleed_in).toFixed(4));
+      const total_h_in = Number((th + 2 * bleed_in).toFixed(4));
+
+      const dpi = 300;
+      const work_w = Math.round(total_w_in * dpi);
+      const work_h = Math.round(total_h_in * dpi);
+      const bleed_px = Math.round(bleed_in * dpi);
+      const trim_w_px = Math.round(tw * dpi);
+      const trim_h_px = Math.round(th * dpi);
+      const spine_w_px = work_w - 2 * (bleed_px + trim_w_px);
+      const spine_left_x = bleed_px + trim_w_px;
+      const spine_right_x = spine_left_x + spine_w_px;
+
+      // Clear uploaded PNG overlay if dimensions changed manually so synthetic KDP vector guide is shown accurately
+      kdpGuideImg = null;
+      kdpTemplateTitle.textContent = "Drop KDP Template .ZIP or .PNG here";
+
+      kdpSpec = {
+        name: `CUSTOM_${tw}x${th}_${pages}_${paper}`,
+        work_w,
+        work_h,
+        native_w: work_w * 2,
+        native_h: work_h * 2,
+        trim_w_in: tw,
+        trim_h_in: th,
+        pages,
+        paper_code: paper,
+        bleed_in,
+        spine_w_in,
+        total_w_in,
+        total_h_in,
+        bleed_px,
+        trim_w_px,
+        trim_h_px,
+        spine_w_px,
+        spine_left_x,
+        spine_right_x
+      };
+
+      kdpSpecBadge.textContent = `${tw}"×${th}" • ${pages}p`;
+      kdpSpineText.textContent = `${spine_w_in.toFixed(2)}" (${spine_w_px}px)`;
+      kdpWrapDimText.textContent = `${work_w} × ${work_h}`;
+
+      if (appMode === "paperback") {
+        const oldW = TARGET_W;
+        const oldH = TARGET_H;
+        TARGET_W = work_w;
+        TARGET_H = work_h;
+        canvas.width = TARGET_W;
+        canvas.height = TARGET_H;
+        targetDimText.textContent = `${TARGET_W} × ${TARGET_H}`;
+        fitViewport();
+        if (sourceImg) {
+          if (imgW > 0 && oldH === TARGET_H) {
+            imgX = Math.round(imgX + (TARGET_W - oldW));
+            updateGapSummary();
+            renderCanvas();
+          } else {
+            snapFrontCoverPaperback("right_trim");
+          }
+        } else {
+          renderCanvas();
+        }
+      }
+    }
+
+    kdpTrimSelect.addEventListener("change", recalculateKdpFromInputs);
+    kdpPagesInput.addEventListener("change", recalculateKdpFromInputs);
+    kdpPaperSelect.addEventListener("change", recalculateKdpFromInputs);
+    showKdpGuideCheck.addEventListener("change", () => {
+      syncQuickGuideButton();
+      renderCanvas();
+    });
+    kdpGuideOpacitySlider.addEventListener("input", () => {
+      kdpOpacityVal.textContent = `${kdpGuideOpacitySlider.value}%`;
+      renderCanvas();
+    });
+
+    // KDP Template ZIP / PNG Dropzone
+    async function handleKdpTemplateFile(file) {
+      if (!file) return;
+      showStatus(`Reading KDP template "${file.name}"...`, true);
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const res = await fetch("/api/kdp_template", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              filename: file.name,
+              data_b64: e.target.result
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Template upload failed");
+          await applyKdpTemplateMeta(data.template);
+          showStatus(`Loaded KDP Template: ${data.template.trim_w_in}"×${data.template.trim_h_in}" (${data.template.pages} pages)`, false, 4000);
+        } catch (err) {
+          showStatus(`KDP Template Error: ${err.message}`, false, 0, true);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    kdpDropzone.addEventListener("click", () => kdpFileInput.click());
+    kdpFileInput.addEventListener("change", (e) => {
+      if (e.target.files && e.target.files[0]) handleKdpTemplateFile(e.target.files[0]);
+    });
+    kdpDropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      kdpDropzone.classList.add("dragover");
+    });
+    kdpDropzone.addEventListener("dragleave", () => kdpDropzone.classList.remove("dragover"));
+    kdpDropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      kdpDropzone.classList.remove("dragover");
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleKdpTemplateFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    async function checkApiKey() {
+      try {
+        const res = await fetch("/api/config");
+        const data = await res.json();
+        if (data.has_key) {
+          apiStatusDot.classList.add("ok");
+          apiStatusText.textContent = "API Key: ************";
+        } else {
+          apiStatusDot.classList.remove("ok");
+          apiStatusText.textContent = "Set OpenRouter API Key";
+        }
+      } catch (err) {
+        apiStatusText.textContent = "Server Offline";
+      }
+    }
+
+    apiKeyBtn.addEventListener("click", () => {
+      apiModal.classList.remove("hidden");
+      newApiKeyInput.focus();
+    });
+    closeModalBtn.addEventListener("click", () => apiModal.classList.add("hidden"));
+    saveApiKeyBtn.addEventListener("click", async () => {
+      const key = newApiKeyInput.value.trim();
+      if (!key) return;
+      try {
+        const res = await fetch("/api/config", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ api_key: key })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          apiStatusDot.classList.add("ok");
+          apiStatusText.textContent = "API Key: ************";
+          newApiKeyInput.value = "";
+          apiModal.classList.add("hidden");
+          showStatus("API Key updated and saved!", false, 3000);
+        }
+      } catch (e) {
+        alert("Failed to save API Key: " + e.message);
+      }
+    });
+
+    function detectRatioLabel(w, h) {
+      const r = w / h;
+      if (Math.abs(r - 0.75) < 0.015) return "3:4 AR";
+      if (Math.abs(r - 0.80) < 0.015) return "4:5 AR";
+      if (Math.abs(r - 0.625) < 0.01) return "5:8 AR";
+      if (Math.abs(r - 0.666) < 0.015) return "2:3 AR";
+      if (Math.abs(r - 1.0) < 0.015) return "1:1 AR";
+      return `${r.toFixed(2)}:1`;
+    }
+
+    function handleFile(file) {
+      if (!file) return;
+      // If user drops a .zip file onto the stage, automatically switch to Paperback mode and load KDP template!
+      if (file.name.toLowerCase().endsWith(".zip")) {
+        if (appMode !== "paperback") setAppMode("paperback");
+        handleKdpTemplateFile(file);
+        return;
+      }
+      if (!file.type.startsWith("image/")) return;
+
+      sourceFileName = file.name.replace(/\.[^/.]+$/, "");
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          sourceImg = img;
+          aiTopLayerImg = null;
+          aiBottomLayerImg = null;
+          historyItems = [];
+          activeHistoryIndex = -1;
+          renderHistoryBar();
+
+          viewResultBtn.disabled = true;
+          viewRawAiBtn.disabled = true;
+          downloadPngBtn.disabled = true;
+          downloadJpgBtn.disabled = true;
+          downloadRawAiBtn.disabled = true;
+          downloadKdpPdfBtn.disabled = true;
+          redoBottomOnlyBtn.disabled = true;
+          redoTopOnlyBtn.disabled = true;
+          aiAlignRow.style.display = "none";
+          generateBtn.disabled = false;
+          saveProjectBtn.disabled = false;
+          projectNameInput.value = sourceFileName;
+
+          origDimText.textContent = `${img.width} × ${img.height}`;
+          sourceRatioBadge.textContent = detectRatioLabel(img.width, img.height);
+
+          customZoom = 100;
+          scaleSlider.value = 100;
+          scaleValLabel.textContent = "100%";
+
+          if (appMode === "ebook") {
+            baseFitScale = TARGET_W / img.width;
+            applyScaleAndPosition(activePosPreset);
+          } else {
+            snapFrontCoverPaperback("right_trim");
+          }
+          setViewMode("layout");
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    dropzone.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files && e.target.files[0]) handleFile(e.target.files[0]);
+    });
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.classList.add("dragover");
+    });
+    dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("dragover");
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    viewport.addEventListener("dragover", (e) => e.preventDefault());
+    viewport.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+    });
+
+    // Position Front Cover on Right Side of Paperback Wrap
+    function snapFrontCoverPaperback(preset = "right_trim") {
+      if (!sourceImg) return;
+      posSnapRightTrimBtn.classList.toggle("active", preset === "right_trim");
+      posSnapRightFullBleedBtn.classList.toggle("active", preset === "right_bleed");
+
+      const frontAreaX = kdpSpec.spine_right_x; // Right fold of the spine
+      const frontAreaW = TARGET_W - frontAreaX; // Width from spine fold to right bleed edge
+
+      if (preset === "right_trim") {
+        // Fit height to total wrap height (2475px) or match right front area width
+        baseFitScale = Math.max(frontAreaW / sourceImg.width, TARGET_H / sourceImg.height);
+      } else {
+        // Slightly fuller bleed coverage
+        baseFitScale = Math.max((frontAreaW + kdpSpec.bleed_px) / sourceImg.width, (TARGET_H + kdpSpec.bleed_px) / sourceImg.height);
+      }
+
+      const scale = baseFitScale * (customZoom / 100);
+      imgW = Math.round(sourceImg.width * scale);
+      imgH = Math.round(sourceImg.height * scale);
+
+      // Center over the front cover trim area (between spine_right_x and right trim line)
+      const frontTrimCenterX = kdpSpec.spine_right_x + kdpSpec.trim_w_px / 2;
+      imgX = Math.round(frontTrimCenterX - imgW / 2);
+      // Ensure right edge reaches at least TARGET_W
+      if (imgX + imgW < TARGET_W) {
+        imgX = TARGET_W - imgW;
+      }
+      imgY = Math.round((TARGET_H - imgH) / 2);
+
+      activePosPreset = preset;
+      updateGapSummary();
+      renderCanvas();
+    }
+
+    posSnapRightTrimBtn.addEventListener("click", () => snapFrontCoverPaperback("right_trim"));
+    posSnapRightFullBleedBtn.addEventListener("click", () => snapFrontCoverPaperback("right_bleed"));
+
+    function applyScaleAndPosition(preset) {
+      if (!sourceImg) return;
+      if (appMode === "paperback") {
+        snapFrontCoverPaperback(preset === "right_bleed" ? "right_bleed" : "right_trim");
+        return;
+      }
+      const scale = baseFitScale * (customZoom / 100);
+      imgW = Math.round(sourceImg.width * scale);
+      imgH = Math.round(sourceImg.height * scale);
+      imgX = Math.round((TARGET_W - imgW) / 2);
+
+      if (preset === "top") {
+        imgY = TARGET_H - imgH;
+      } else if (preset === "bottom") {
+        imgY = 0;
+      } else if (preset === "both") {
+        imgY = Math.round((TARGET_H - imgH) / 2);
+      }
+
+      updatePositionButtons(preset);
+      updateGapSummary();
+      renderCanvas();
+    }
+
+    function updatePositionButtons(preset) {
+      activePosPreset = preset;
+      posExpandTopBtn.classList.toggle("active", preset === "top");
+      posExpandBothBtn.classList.toggle("active", preset === "both");
+      posExpandBottomBtn.classList.toggle("active", preset === "bottom");
+    }
+
+    function updateGapSummary() {
+      if (!sourceImg) {
+        gapSummaryPill.textContent = appMode === "ebook"
+          ? "Expand Top: 0px • Expand Bottom: 0px"
+          : `Spine: ${kdpSpec.spine_w_px}px • Back Cover + Bleed: ${kdpSpec.spine_left_x}px`;
+        return;
+      }
+      if (appMode === "ebook") {
+        const topGap = Math.max(0, Math.round(imgY));
+        const bottomGap = Math.max(0, Math.round(TARGET_H - (imgY + imgH)));
+        gapSummaryPill.textContent = `Expand Top: ${topGap}px • Expand Bottom: ${bottomGap}px`;
+      } else {
+        const leftGap = Math.max(0, Math.round(imgX));
+        gapSummaryPill.textContent = `AI Fill Left (Back + Spine): ${leftGap}px • Front Cover X: ${imgX}px`;
+      }
+      updatePartialRedoButtons();
+    }
+
+    function updatePartialRedoButtons() {
+      const hasAiResult = Boolean(aiTopLayerImg || aiBottomLayerImg);
+      const topGap = Math.max(0, Math.round(imgY));
+      const bottomGap = Math.max(0, Math.round(TARGET_H - (imgY + imgH)));
+
+      redoBottomOnlyBtn.disabled = !(hasAiResult && bottomGap > 0);
+      redoTopOnlyBtn.disabled = !(hasAiResult && topGap > 0);
+    }
+
+    posExpandTopBtn.addEventListener("click", () => applyScaleAndPosition("top"));
+    posExpandBothBtn.addEventListener("click", () => applyScaleAndPosition("both"));
+    posExpandBottomBtn.addEventListener("click", () => applyScaleAndPosition("bottom"));
+
+    scaleFitWidthBtn.addEventListener("click", () => {
+      scaleFitWidthBtn.classList.add("active");
+      scaleContainBtn.classList.remove("active");
+      customScaleRow.style.display = "none";
+      customZoom = 100;
+      scaleSlider.value = 100;
+      scaleValLabel.textContent = "100%";
+      applyScaleAndPosition(activePosPreset === "custom" ? "both" : activePosPreset);
+    });
+
+    scaleContainBtn.addEventListener("click", () => {
+      scaleContainBtn.classList.add("active");
+      scaleFitWidthBtn.classList.remove("active");
+      customScaleRow.style.display = "flex";
+    });
+
+    scaleSlider.addEventListener("input", () => {
+      if (!sourceImg) return;
+      const oldCenterX = imgX + imgW / 2;
+      const oldCenterY = imgY + imgH / 2;
+      customZoom = parseInt(scaleSlider.value, 10);
+      scaleValLabel.textContent = `${customZoom}%`;
+      if (activePosPreset === "custom" || appMode === "paperback") {
+        const scale = baseFitScale * (customZoom / 100);
+        imgW = Math.round(sourceImg.width * scale);
+        imgH = Math.round(sourceImg.height * scale);
+        imgX = Math.round(oldCenterX - imgW / 2);
+        imgY = Math.round(oldCenterY - imgH / 2);
+        updateGapSummary();
+        renderCanvas();
+      } else {
+        applyScaleAndPosition(activePosPreset);
+      }
+    });
+
+    function nudgeCover(dx, dy) {
+      if (!sourceImg) return;
+      imgX = Math.round(imgX + dx);
+      imgY = Math.round(imgY + dy);
+      updatePositionButtons("custom");
+      updateGapSummary();
+      renderCanvas();
+    }
+
+    nudgeLeftBtn.addEventListener("click", () => nudgeCover(-15, 0));
+    nudgeRightBtn.addEventListener("click", () => nudgeCover(15, 0));
+    nudgeUpBtn.addEventListener("click", () => nudgeCover(0, -15));
+    nudgeDownBtn.addEventListener("click", () => nudgeCover(0, 15));
+    shrinkSafeBtn.addEventListener("click", () => {
+      if (!sourceImg) return;
+      const oldCenterX = imgX + imgW / 2;
+      const oldCenterY = imgY + imgH / 2;
+      customZoom = Math.max(40, customZoom - 2);
+      scaleSlider.value = customZoom;
+      scaleValLabel.textContent = `${customZoom}%`;
+      customScaleRow.style.display = "flex";
+      scaleContainBtn.classList.add("active");
+      scaleFitWidthBtn.classList.remove("active");
+
+      const scale = baseFitScale * (customZoom / 100);
+      imgW = Math.round(sourceImg.width * scale);
+      imgH = Math.round(sourceImg.height * scale);
+      imgX = Math.round(oldCenterX - imgW / 2);
+      imgY = Math.round(oldCenterY - imgH / 2);
+      updatePositionButtons("custom");
+      updateGapSummary();
+      renderCanvas();
+    });
+
+    showGuidesCheck.addEventListener("change", () => {
+      syncQuickGuideButton();
+      renderCanvas();
+    });
+
+    function syncQuickGuideButton() {
+      const isOn = appMode === "ebook" ? showGuidesCheck.checked : showKdpGuideCheck.checked;
+      quickToggleGuidesBtn.classList.toggle("active", isOn);
+      quickToggleGuidesBtn.textContent = isOn ? "👁 Guides: ON" : "👁 Guides: OFF";
+    }
+
+    quickToggleGuidesBtn.addEventListener("click", () => {
+      if (appMode === "ebook") {
+        showGuidesCheck.checked = !showGuidesCheck.checked;
+      } else {
+        showKdpGuideCheck.checked = !showKdpGuideCheck.checked;
+      }
+      syncQuickGuideButton();
+      renderCanvas();
+    });
+    preserveOriginalCheck.addEventListener("change", () => {
+      featherControlRow.style.opacity = preserveOriginalCheck.checked ? "1" : "0.4";
+      renderCanvas();
+    });
+    featherSlider.addEventListener("input", () => {
+      featherValLabel.textContent = `${featherSlider.value} px`;
+      renderCanvas();
+    });
+    aiOffsetSlider.addEventListener("input", () => {
+      aiVerticalOffset = parseInt(aiOffsetSlider.value, 10);
+      aiOffsetLabel.textContent = `${aiVerticalOffset > 0 ? "+" : ""}${aiVerticalOffset} px`;
+      renderCanvas();
+    });
+
+    modelSelect.addEventListener("change", () => {
+      customModelRow.style.display = modelSelect.value === "custom" ? "flex" : "none";
+    });
+
+    // Back Cover Blurb & Spine Typography Live Listeners
+    [
+      backHookInput, backBlurbInput, blurbFontSelect, blurbAlignSelect,
+      hookColorInput, blurbColorInput, scrimColorInput,
+      spineTitleInput, spineTitleColorInput, spineAuthorInput, spineAuthorColorInput,
+      spineNumberInput, spineNumberColorInput
+    ].forEach((el) => {
+      el.addEventListener("input", renderCanvas);
+      el.addEventListener("change", renderCanvas);
+    });
+
+    hookSizeSlider.addEventListener("input", () => {
+      hookSizeVal.textContent = `${hookSizeSlider.value} px`;
+      renderCanvas();
+    });
+    blurbSizeSlider.addEventListener("input", () => {
+      blurbSizeVal.textContent = `${blurbSizeSlider.value} px`;
+      renderCanvas();
+    });
+    lineHeightSlider.addEventListener("input", () => {
+      lineHeightVal.textContent = `${(parseInt(lineHeightSlider.value, 10) / 100).toFixed(2)}×`;
+      renderCanvas();
+    });
+    blurbYSlider.addEventListener("input", () => {
+      blurbYVal.textContent = `${blurbYSlider.value} px`;
+      renderCanvas();
+    });
+    scrimOpacitySlider.addEventListener("input", () => {
+      scrimVal.textContent = `${scrimOpacitySlider.value}%`;
+      renderCanvas();
+    });
+    textShadowSlider.addEventListener("input", () => {
+      shadowVal.textContent = `${textShadowSlider.value} px`;
+      renderCanvas();
+    });
+    spineTitlePosSlider.addEventListener("input", () => {
+      spineTitlePosVal.textContent = `${spineTitlePosSlider.value}%`;
+      renderCanvas();
+    });
+    spineSizeSlider.addEventListener("input", () => {
+      spineSizeVal.textContent = `${spineSizeSlider.value} px`;
+      renderCanvas();
+    });
+    spineAuthorPosSlider.addEventListener("input", () => {
+      spineAuthorPosVal.textContent = `${spineAuthorPosSlider.value}%`;
+      renderCanvas();
+    });
+    spineAuthorSizeSlider.addEventListener("input", () => {
+      spineAuthorSizeVal.textContent = `${spineAuthorSizeSlider.value} px`;
+      renderCanvas();
+    });
+    spineNumberPosSlider.addEventListener("input", () => {
+      spineNumberPosVal.textContent = `${spineNumberPosSlider.value}%`;
+      renderCanvas();
+    });
+    spineNumberSizeSlider.addEventListener("input", () => {
+      spineNumberSizeVal.textContent = `${spineNumberSizeSlider.value} px`;
+      renderCanvas();
+    });
+
+    // Canvas Interactive Dragging
+    canvas.addEventListener("mousedown", (e) => {
+      if (!sourceImg) return;
+      isDragging = true;
+      const rect = canvas.getBoundingClientRect();
+      const scaleFactor = TARGET_W / rect.width;
+      dragStartX = e.clientX * scaleFactor;
+      dragStartY = e.clientY * scaleFactor;
+      dragInitImgX = imgX;
+      dragInitImgY = imgY;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isDragging || !sourceImg) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleFactor = TARGET_W / rect.width;
+      const curX = e.clientX * scaleFactor;
+      const curY = e.clientY * scaleFactor;
+
+      const dx = curX - dragStartX;
+      const dy = curY - dragStartY;
+
+      if (appMode === "ebook" && imgW === TARGET_W) {
+        imgX = 0;
+      } else {
+        imgX = Math.round(dragInitImgX + dx);
+        // In paperback mode, snap nicely to right spine fold (spine_right_x)
+        if (appMode === "paperback" && Math.abs(imgX - kdpSpec.spine_right_x) < 18) {
+          imgX = kdpSpec.spine_right_x;
+        }
+      }
+
+      imgY = Math.round(dragInitImgY + dy);
+      if (Math.abs(imgY) < 12) imgY = 0;
+      if (Math.abs((imgY + imgH) - TARGET_H) < 12) imgY = TARGET_H - imgH;
+      if (Math.abs(imgY - (TARGET_H - imgH) / 2) < 12) imgY = Math.round((TARGET_H - imgH) / 2);
+
+      updatePositionButtons("custom");
+      updateGapSummary();
+      renderCanvas();
+    });
+
+    window.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
+
+    function setViewMode(mode) {
+      viewMode = mode;
+      viewLayoutBtn.classList.toggle("active", mode === "layout");
+      viewResultBtn.classList.toggle("active", mode === "result");
+      viewRawAiBtn.classList.toggle("active", mode === "raw_ai");
+      renderCanvas();
+    }
+
+    viewLayoutBtn.addEventListener("click", () => setViewMode("layout"));
+    viewResultBtn.addEventListener("click", () => {
+      if (aiTopLayerImg || aiBottomLayerImg) setViewMode("result");
+    });
+    viewRawAiBtn.addEventListener("click", () => {
+      if (aiTopLayerImg || aiBottomLayerImg) setViewMode("raw_ai");
+    });
+
+    function drawSingleAiImage(targetCtx, aiImg) {
+      if (!aiImg) return;
+      const aiRatio = aiImg.width / aiImg.height;
+      const targetRatio = TARGET_W / TARGET_H;
+
+      let drawW = TARGET_W;
+      let drawH = TARGET_H;
+      let drawX = appMode === "paperback" ? aiVerticalOffset : 0;
+      let drawY = appMode === "ebook" ? aiVerticalOffset : 0;
+
+      if (Math.abs(aiRatio - targetRatio) > 0.01) {
+        if (aiRatio > targetRatio) {
+          drawH = TARGET_H;
+          drawW = drawH * aiRatio;
+          drawX = (TARGET_W - drawW) / 2 + (appMode === "paperback" ? aiVerticalOffset : 0);
+        } else {
+          drawW = TARGET_W;
+          drawH = drawW / aiRatio;
+          drawY = (TARGET_H - drawH) / 2 + (appMode === "ebook" ? aiVerticalOffset : 0);
+        }
+      }
+      targetCtx.drawImage(aiImg, drawX, drawY, drawW, drawH);
+    }
+
+    function drawCombinedAiLayers(targetCtx) {
+      const splitY = Math.round(imgY + imgH / 2);
+
+      if (appMode === "ebook" && aiTopLayerImg && aiBottomLayerImg && aiTopLayerImg !== aiBottomLayerImg) {
+        targetCtx.save();
+        targetCtx.beginPath();
+        targetCtx.rect(0, 0, TARGET_W, splitY);
+        targetCtx.clip();
+        drawSingleAiImage(targetCtx, aiTopLayerImg);
+        targetCtx.restore();
+
+        targetCtx.save();
+        targetCtx.beginPath();
+        targetCtx.rect(0, splitY, TARGET_W, TARGET_H - splitY);
+        targetCtx.clip();
+        drawSingleAiImage(targetCtx, aiBottomLayerImg);
+        targetCtx.restore();
+      } else {
+        const single = aiTopLayerImg || aiBottomLayerImg;
+        drawSingleAiImage(targetCtx, single);
+      }
+    }
+
+    function drawCompositeToContext(targetCtx, includeOverlays = false) {
+      targetCtx.clearRect(0, 0, TARGET_W, TARGET_H);
+
+      if (!sourceImg) {
+        if (includeOverlays) {
+          targetCtx.fillStyle = "#161923";
+          targetCtx.fillRect(0, 0, TARGET_W, TARGET_H);
+
+          if (appMode === "paperback") {
+            drawPaperbackGuides(targetCtx);
+            targetCtx.fillStyle = "#e2e8f0";
+            targetCtx.font = "700 42px Inter, sans-serif";
+            targetCtx.textAlign = "center";
+            const rightCenterX = kdpSpec.spine_right_x + kdpSpec.trim_w_px / 2;
+            targetCtx.fillText("DROP FRONT COVER HERE", rightCenterX, TARGET_H / 2 - 20);
+            targetCtx.font = "500 28px Inter, sans-serif";
+            targetCtx.fillStyle = "#94a3b8";
+            targetCtx.fillText(`(${kdpSpec.trim_w_in}" × ${kdpSpec.trim_h_in}" Front Cover Area)`, rightCenterX, TARGET_H / 2 + 30);
+          } else {
+            targetCtx.strokeStyle = "#2e344a";
+            targetCtx.lineWidth = 4;
+            targetCtx.strokeRect(40, 40, TARGET_W - 80, TARGET_H - 80);
+            targetCtx.fillStyle = "#8c94b0";
+            targetCtx.font = "600 38px Inter, sans-serif";
+            targetCtx.textAlign = "center";
+            targetCtx.fillText("1600 × 2560 (5:8 Ebook Cover Canvas)", TARGET_W / 2, TARGET_H / 2 - 20);
+            targetCtx.font = "400 28px Inter, sans-serif";
+            targetCtx.fillStyle = "#5f6784";
+            targetCtx.fillText("Drop a 3:4 or 4:5 image from Leonardo to begin", TARGET_W / 2, TARGET_H / 2 + 35);
+          }
+        }
+        return;
+      }
+
+      const hasAiResult = Boolean(aiTopLayerImg || aiBottomLayerImg);
+
+      if (viewMode === "raw_ai" && hasAiResult) {
+        drawCombinedAiLayers(targetCtx);
+      } else if (viewMode === "result" && hasAiResult) {
+        drawCombinedAiLayers(targetCtx);
+        if (preserveOriginalCheck.checked) {
+          const feather = parseInt(featherSlider.value, 10);
+          drawFeatheredOriginal(targetCtx, feather);
+        }
+      } else {
+        if (includeOverlays) {
+          targetCtx.fillStyle = "rgba(124, 92, 255, 0.08)";
+          targetCtx.fillRect(0, 0, TARGET_W, TARGET_H);
+        }
+
+        targetCtx.drawImage(sourceImg, imgX, imgY, imgW, imgH);
+
+        if (includeOverlays) {
+          targetCtx.save();
+          targetCtx.strokeStyle = "#7c5cff";
+          targetCtx.lineWidth = 3;
+          targetCtx.setLineDash([14, 10]);
+          targetCtx.strokeRect(imgX, imgY, imgW, imgH);
+          targetCtx.restore();
+
+          if (appMode === "ebook") {
+            const topGap = Math.max(0, imgY);
+            const bottomGap = Math.max(0, TARGET_H - (imgY + imgH));
+            if (topGap > 40) {
+              drawZoneBadge(targetCtx, TARGET_W / 2, topGap / 2, `AI EXPAND TOP (+${Math.round(topGap)} px)`);
+            }
+            if (bottomGap > 40) {
+              drawZoneBadge(targetCtx, TARGET_W / 2, imgY + imgH + bottomGap / 2, `AI EXPAND BOTTOM (+${Math.round(bottomGap)} px)`);
+            }
+          } else {
+            const leftGap = Math.max(0, imgX);
+            if (leftGap > 80) {
+              drawZoneBadge(targetCtx, leftGap / 2, TARGET_H / 2, `← AI EXPAND SPINE & BACK COVER (${Math.round(leftGap)} px)`);
+            }
+          }
+        }
+      }
+
+      // Draw Back Cover Blurb & Spine Typography (Included on Result & Layout, AND exported into final PNG/JPG/PDF!)
+      if (appMode === "paperback" && viewMode !== "raw_ai") {
+        drawPaperbackTypography(targetCtx);
+      }
+
+      // Overlays (NEVER included when exporting final PNG/JPG/PDF because includeOverlays=false)
+      if (includeOverlays) {
+        if (appMode === "ebook" && showGuidesCheck.checked) {
+          drawCoverTypographyGuides(targetCtx);
+        } else if (appMode === "paperback" && showKdpGuideCheck.checked) {
+          drawPaperbackGuides(targetCtx);
+        }
+      }
+    }
+
+    function wrapParagraphLines(targetCtx, text, maxWidth) {
+      const words = text.split(/\s+/).filter(Boolean);
+      const lines = [];
+      let currentLine = "";
+      for (const word of words) {
+        const testLine = currentLine ? `${currentLine} ${word}` : word;
+        if (targetCtx.measureText(testLine).width > maxWidth && currentLine) {
+          lines.push({ text: currentLine, isLastInPara: false });
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      }
+      if (currentLine) {
+        lines.push({ text: currentLine, isLastInPara: true });
+      }
+      return lines;
+    }
+
+    function drawJustifiedLine(targetCtx, text, x, y, maxWidth) {
+      const words = text.split(/\s+/).filter(Boolean);
+      if (words.length <= 1) {
+        targetCtx.textAlign = "left";
+        targetCtx.fillText(text, x, y);
+        return;
+      }
+      let totalWordsW = 0;
+      for (const w of words) {
+        totalWordsW += targetCtx.measureText(w).width;
+      }
+      const gap = (maxWidth - totalWordsW) / (words.length - 1);
+      let curX = x;
+      targetCtx.textAlign = "left";
+      for (const w of words) {
+        targetCtx.fillText(w, curX, y);
+        curX += targetCtx.measureText(w).width + gap;
+      }
+    }
+
+    function hexToRgb(hex) {
+      const clean = (hex || "#080a10").replace("#", "");
+      if (clean.length === 3) {
+        return {
+          r: parseInt(clean[0] + clean[0], 16) || 0,
+          g: parseInt(clean[1] + clean[1], 16) || 0,
+          b: parseInt(clean[2] + clean[2], 16) || 0
+        };
+      }
+      return {
+        r: parseInt(clean.substring(0, 2), 16) || 0,
+        g: parseInt(clean.substring(2, 4), 16) || 0,
+        b: parseInt(clean.substring(4, 6), 16) || 0
+      };
+    }
+
+    function drawPaperbackTypography(targetCtx) {
+      const hookText = backHookInput.value.trim();
+      const blurbText = backBlurbInput.value.trim();
+      const spineTitle = spineTitleInput.value.trim();
+      const spineAuthor = spineAuthorInput.value.trim();
+      const spineNumber = spineNumberInput.value.trim();
+
+      const fontFam = blurbFontSelect.value;
+      const align = blurbAlignSelect.value;
+      const hookColor = hookColorInput.value || "#fde68a";
+      const textColor = blurbColorInput.value || "#f8fafc";
+      const scrimHex = scrimColorInput.value || "#080a10";
+      const scrimRgb = hexToRgb(scrimHex);
+      const hookSize = parseInt(hookSizeSlider.value, 10) || 42;
+      const blurbSize = parseInt(blurbSizeSlider.value, 10) || 34;
+      const lineMult = (parseInt(lineHeightSlider.value, 10) || 140) / 100;
+      const startY = parseInt(blurbYSlider.value, 10) || 230;
+      const scrimOpacity = (parseInt(scrimOpacitySlider.value, 10) || 0) / 100;
+      const shadowBlur = parseInt(textShadowSlider.value, 10) || 0;
+      const spineSize = parseInt(spineSizeSlider.value, 10) || 38;
+
+      const b = kdpSpec.bleed_px;
+      const sl = kdpSpec.spine_left_x;
+      const sr = kdpSpec.spine_right_x;
+
+      // Safe Back Cover text box (0.55" = 165px inset from left trim and spine fold)
+      const sidePad = Math.round(0.55 * 300); // 165px
+      const boxX = b + sidePad;
+      const boxW = Math.max(400, (sl - sidePad) - boxX);
+      const centerX = boxX + boxW / 2;
+
+      // 1. Measure all Hook & Blurb lines first so we can size the soft dark readability vignette accurately
+      const renderedBlocks = [];
+      let curY = startY;
+
+      if (hookText) {
+        targetCtx.save();
+        targetCtx.font = `italic 700 ${hookSize}px ${fontFam}`;
+        const paras = hookText.split(/\n+/);
+        for (const p of paras) {
+          if (!p.trim()) {
+            curY += Math.round(hookSize * 0.6);
+            continue;
+          }
+          const lines = wrapParagraphLines(targetCtx, p.trim(), boxW);
+          for (const ln of lines) {
+            renderedBlocks.push({
+              text: ln.text,
+              y: curY,
+              font: `italic 700 ${hookSize}px ${fontFam}`,
+              isHook: true,
+              isLastInPara: ln.isLastInPara
+            });
+            curY += Math.round(hookSize * lineMult);
+          }
+          curY += Math.round(hookSize * 0.45);
+        }
+        targetCtx.restore();
+        curY += Math.round(blurbSize * 0.35);
+      }
+
+      if (blurbText) {
+        targetCtx.save();
+        targetCtx.font = `400 ${blurbSize}px ${fontFam}`;
+        const paras = blurbText.split(/\n\s*\n|\n/);
+        for (const p of paras) {
+          if (!p.trim()) continue;
+          const lines = wrapParagraphLines(targetCtx, p.trim(), boxW);
+          for (const ln of lines) {
+            renderedBlocks.push({
+              text: ln.text,
+              y: curY,
+              font: `400 ${blurbSize}px ${fontFam}`,
+              isHook: false,
+              isLastInPara: ln.isLastInPara
+            });
+            curY += Math.round(blurbSize * lineMult);
+          }
+          curY += Math.round(blurbSize * 0.65); // Paragraph spacing
+        }
+        targetCtx.restore();
+      }
+
+      // 2. Draw Soft Feathered Readability Vignette / Scrim behind the Back Cover Blurb if text is present
+      if (renderedBlocks.length > 0 && scrimOpacity > 0) {
+        const topTextY = startY - hookSize;
+        const botTextY = curY;
+        const padX = 75;
+        const padY = 65;
+        const rectX = boxX - padX;
+        const rectY = topTextY - padY;
+        const rectW = boxW + padX * 2;
+        const rectH = (botTextY - topTextY) + padY * 2;
+
+        targetCtx.save();
+        targetCtx.filter = "blur(36px)";
+        targetCtx.fillStyle = `rgba(${scrimRgb.r}, ${scrimRgb.g}, ${scrimRgb.b}, ${scrimOpacity})`;
+        targetCtx.beginPath();
+        targetCtx.roundRect(rectX, rectY, rectW, rectH, 48);
+        targetCtx.fill();
+        targetCtx.restore();
+      }
+
+      // 3. Render Hook & Blurb Text with crisp drop shadow
+      if (renderedBlocks.length > 0) {
+        targetCtx.save();
+        targetCtx.textBaseline = "top";
+        if (shadowBlur > 0) {
+          targetCtx.shadowColor = "rgba(0, 0, 0, 0.92)";
+          targetCtx.shadowBlur = shadowBlur;
+          targetCtx.shadowOffsetX = 0;
+          targetCtx.shadowOffsetY = 2;
+        }
+
+        for (const blk of renderedBlocks) {
+          targetCtx.font = blk.font;
+          targetCtx.fillStyle = blk.isHook ? hookColor : textColor;
+          // Draw twice when shadow is active so dark glow is rich and legible over bright highlights
+          const EffectiveAlign = blk.isHook && align === "justify" ? "center" : align;
+          if (EffectiveAlign === "center") {
+            targetCtx.textAlign = "center";
+            targetCtx.fillText(blk.text, centerX, blk.y);
+            if (shadowBlur > 8) targetCtx.fillText(blk.text, centerX, blk.y);
+          } else if (EffectiveAlign === "justify" && !blk.isLastInPara) {
+            drawJustifiedLine(targetCtx, blk.text, boxX, blk.y, boxW);
+          } else {
+            targetCtx.textAlign = "left";
+            targetCtx.fillText(blk.text, boxX, blk.y);
+            if (shadowBlur > 8) targetCtx.fillText(blk.text, boxX, blk.y);
+          }
+        }
+        targetCtx.restore();
+      }
+
+      // 4. Render Spine Text (Title & Author rotated 90° clockwise; Series Number upright/vertical!)
+      if (spineTitle || spineAuthor || spineNumber) {
+        const spineCenterX = (sl + sr) / 2;
+        const safeTopY = b + Math.round(0.35 * 300); // 0.35" from top trim
+        const safeBotY = TARGET_H - b - Math.round(0.35 * 300); // 0.35" from bottom trim
+        const usableH = safeBotY - safeTopY;
+
+        const titlePosPct = (parseInt(spineTitlePosSlider.value, 10) || 32) / 100;
+        const authorPosPct = (parseInt(spineAuthorPosSlider.value, 10) || 82) / 100;
+        const numberPosPct = (parseInt(spineNumberPosSlider.value, 10) || 93) / 100;
+        const authorSize = parseInt(spineAuthorSizeSlider.value, 10) || 32;
+        const numberSize = parseInt(spineNumberSizeSlider.value, 10) || 36;
+        const titleColor = spineTitleColorInput.value || "#fde68a";
+        const authorColor = spineAuthorColorInput.value || "#f8fafc";
+        const numberColor = spineNumberColorInput.value || "#fde68a";
+
+        targetCtx.save();
+        if (shadowBlur > 0) {
+          targetCtx.shadowColor = "rgba(0, 0, 0, 0.92)";
+          targetCtx.shadowBlur = Math.min(16, shadowBlur);
+          targetCtx.shadowOffsetX = 0;
+          targetCtx.shadowOffsetY = 2;
+        }
+
+        if (spineTitle) {
+          const titleY = safeTopY + usableH * titlePosPct;
+          targetCtx.save();
+          targetCtx.translate(spineCenterX, titleY);
+          targetCtx.rotate(Math.PI / 2);
+          targetCtx.font = `700 ${spineSize}px ${fontFam}`;
+          targetCtx.fillStyle = titleColor;
+          targetCtx.textAlign = "center";
+          targetCtx.textBaseline = "middle";
+          targetCtx.fillText(spineTitle, 0, 0);
+          if (shadowBlur > 8) targetCtx.fillText(spineTitle, 0, 0);
+          targetCtx.restore();
+        }
+
+        if (spineAuthor) {
+          const authorY = safeTopY + usableH * authorPosPct;
+          targetCtx.save();
+          targetCtx.translate(spineCenterX, authorY);
+          targetCtx.rotate(Math.PI / 2);
+          targetCtx.font = `600 ${authorSize}px ${fontFam}`;
+          targetCtx.fillStyle = authorColor;
+          targetCtx.textAlign = "center";
+          targetCtx.textBaseline = "middle";
+          targetCtx.fillText(spineAuthor, 0, 0);
+          if (shadowBlur > 8) targetCtx.fillText(spineAuthor, 0, 0);
+          targetCtx.restore();
+        }
+
+        if (spineNumber) {
+          // Drawn upright (NOT rotated 90°) so the series number stands vertically when the book is on a shelf!
+          const numberY = safeTopY + usableH * numberPosPct;
+          targetCtx.save();
+          targetCtx.translate(spineCenterX, numberY);
+          targetCtx.font = `700 ${numberSize}px ${fontFam}`;
+          targetCtx.fillStyle = numberColor;
+          targetCtx.textAlign = "center";
+          targetCtx.textBaseline = "middle";
+          targetCtx.fillText(spineNumber, 0, 0);
+          if (shadowBlur > 8) targetCtx.fillText(spineNumber, 0, 0);
+          targetCtx.restore();
+        }
+
+        targetCtx.restore();
+      }
+    }
+
+    function drawPaperbackGuides(targetCtx) {
+      const opacity = parseInt(kdpGuideOpacitySlider.value, 10) / 100;
+      targetCtx.save();
+
+      // 1. If an official KDP PNG template is loaded, blend it so the pink/yellow zones show over dark artwork too!
+      if (kdpGuideImg) {
+        targetCtx.globalAlpha = opacity;
+        targetCtx.drawImage(kdpGuideImg, 0, 0, TARGET_W, TARGET_H);
+      }
+
+      // 2. Always draw crisp vector Spine, Trim, Bleed & Barcode outlines so lines are crystal clear over dark covers
+      targetCtx.globalAlpha = Math.min(1, opacity + 0.25);
+      const b = kdpSpec.bleed_px;
+      const sl = kdpSpec.spine_left_x;
+      const sr = kdpSpec.spine_right_x;
+
+      // Outer Trim Box (dashed cyan/teal)
+      targetCtx.strokeStyle = "#2dd4bf";
+      targetCtx.lineWidth = 3;
+      targetCtx.setLineDash([12, 8]);
+      targetCtx.strokeRect(b, b, TARGET_W - 2 * b, TARGET_H - 2 * b);
+
+      // Left & Right Spine Fold Lines (dashed magenta/pink)
+      targetCtx.strokeStyle = "#f43f5e";
+      targetCtx.lineWidth = 3;
+      targetCtx.beginPath();
+      targetCtx.moveTo(sl, 0);
+      targetCtx.lineTo(sl, TARGET_H);
+      targetCtx.moveTo(sr, 0);
+      targetCtx.lineTo(sr, TARGET_H);
+      targetCtx.stroke();
+
+      // KDP Barcode Safe Zone on Back Cover (2.0" x 1.2" -> 600px x 360px at 300 DPI, 0.25" inside bottom/spine trim)
+      const marginPx = Math.round(0.25 * 300); // 75px
+      const bcW = Math.round(2.0 * 300); // 600px
+      const bcH = Math.round(1.2 * 300); // 360px
+      const bcX = sl - marginPx - bcW;
+      const bcY = TARGET_H - b - marginPx - bcH;
+
+      targetCtx.setLineDash([]);
+      targetCtx.fillStyle = "rgba(251, 191, 36, 0.18)";
+      targetCtx.fillRect(bcX, bcY, bcW, bcH);
+      targetCtx.strokeStyle = "#fbbf24";
+      targetCtx.lineWidth = 3;
+      targetCtx.strokeRect(bcX, bcY, bcW, bcH);
+
+      targetCtx.fillStyle = "#fde68a";
+      targetCtx.font = "700 24px Inter, sans-serif";
+      targetCtx.textAlign = "center";
+      targetCtx.fillText("KDP BARCODE ZONE", bcX + bcW / 2, bcY + bcH / 2 + 8);
+
+      // Top Labels for Back Cover | Spine | Front Cover
+      targetCtx.font = "700 24px Inter, sans-serif";
+      targetCtx.fillStyle = "#5eead4";
+      targetCtx.fillText("BACK COVER", b + kdpSpec.trim_w_px / 2, b + 42);
+      targetCtx.fillText("FRONT COVER", sr + kdpSpec.trim_w_px / 2, b + 42);
+      targetCtx.fillStyle = "#fda4af";
+      targetCtx.fillText("SPINE", (sl + sr) / 2, b + 42);
+
+      targetCtx.restore();
+    }
+
+    function drawFeatheredOriginal(targetCtx, featherPx) {
+      const offCanvas = document.createElement("canvas");
+      offCanvas.width = TARGET_W;
+      offCanvas.height = TARGET_H;
+      const offCtx = offCanvas.getContext("2d");
+
+      offCtx.drawImage(sourceImg, imgX, imgY, imgW, imgH);
+
+      if (featherPx > 0) {
+        offCtx.globalCompositeOperation = "destination-in";
+
+        const maskCanvas = document.createElement("canvas");
+        maskCanvas.width = TARGET_W;
+        maskCanvas.height = TARGET_H;
+        const mCtx = maskCanvas.getContext("2d");
+
+        mCtx.fillStyle = "#ffffff";
+        mCtx.fillRect(imgX, imgY, imgW, imgH);
+
+        mCtx.globalCompositeOperation = "destination-out";
+
+        // Feather top seam if top is inside canvas
+        if (imgY > 2) {
+          const gradTop = mCtx.createLinearGradient(0, imgY, 0, imgY + featherPx);
+          gradTop.addColorStop(0, "rgba(0,0,0,1)");
+          gradTop.addColorStop(1, "rgba(0,0,0,0)");
+          mCtx.fillStyle = gradTop;
+          mCtx.fillRect(imgX, imgY, imgW, featherPx);
+        }
+
+        // Feather bottom seam if bottom is inside canvas
+        if (imgY + imgH < TARGET_H - 2) {
+          const botEdge = imgY + imgH;
+          const gradBot = mCtx.createLinearGradient(0, botEdge - featherPx, 0, botEdge);
+          gradBot.addColorStop(0, "rgba(0,0,0,0)");
+          gradBot.addColorStop(1, "rgba(0,0,0,1)");
+          mCtx.fillStyle = gradBot;
+          mCtx.fillRect(imgX, botEdge - featherPx, imgW, featherPx);
+        }
+
+        // Feather left seam if left is inside canvas (Crucial for Paperback Spine transition!)
+        if (imgX > 2) {
+          const gradLeft = mCtx.createLinearGradient(imgX, 0, imgX + featherPx, 0);
+          gradLeft.addColorStop(0, "rgba(0,0,0,1)");
+          gradLeft.addColorStop(1, "rgba(0,0,0,0)");
+          mCtx.fillStyle = gradLeft;
+          mCtx.fillRect(imgX, imgY, featherPx, imgH);
+        }
+
+        // Feather right seam if right is inside canvas
+        if (imgX + imgW < TARGET_W - 2) {
+          const rightEdge = imgX + imgW;
+          const gradRight = mCtx.createLinearGradient(rightEdge - featherPx, 0, rightEdge, 0);
+          gradRight.addColorStop(0, "rgba(0,0,0,0)");
+          gradRight.addColorStop(1, "rgba(0,0,0,1)");
+          mCtx.fillStyle = gradRight;
+          mCtx.fillRect(rightEdge - featherPx, imgY, featherPx, imgH);
+        }
+
+        offCtx.drawImage(maskCanvas, 0, 0);
+      }
+
+      targetCtx.drawImage(offCanvas, 0, 0);
+    }
+
+    function drawZoneBadge(targetCtx, x, y, text) {
+      targetCtx.save();
+      targetCtx.font = "700 26px Inter, sans-serif";
+      const metrics = targetCtx.measureText(text);
+      const padX = 24;
+      const boxW = metrics.width + padX * 2;
+      const boxH = 52;
+
+      targetCtx.fillStyle = "rgba(24, 27, 36, 0.88)";
+      targetCtx.strokeStyle = "rgba(124, 92, 255, 0.7)";
+      targetCtx.lineWidth = 2;
+      targetCtx.beginPath();
+      targetCtx.roundRect(x - boxW / 2, y - boxH / 2, boxW, boxH, 26);
+      targetCtx.fill();
+      targetCtx.stroke();
+
+      targetCtx.fillStyle = "#d8ceff";
+      targetCtx.textAlign = "center";
+      targetCtx.textBaseline = "middle";
+      targetCtx.fillText(text, x, y);
+      targetCtx.restore();
+    }
+
+    function drawCoverTypographyGuides(targetCtx) {
+      targetCtx.save();
+      targetCtx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+      targetCtx.lineWidth = 2;
+      targetCtx.setLineDash([8, 8]);
+      targetCtx.strokeRect(80, 80, TARGET_W - 160, TARGET_H - 160);
+
+      targetCtx.fillStyle = "rgba(255, 255, 255, 0.04)";
+      targetCtx.fillRect(80, 80, TARGET_W - 160, 480);
+      targetCtx.strokeStyle = "rgba(45, 212, 191, 0.35)";
+      targetCtx.strokeRect(80, 80, TARGET_W - 160, 480);
+
+      targetCtx.fillStyle = "rgba(45, 212, 191, 0.75)";
+      targetCtx.font = "600 22px Inter, sans-serif";
+      targetCtx.textAlign = "left";
+      targetCtx.fillText("TITLE / HEADER ZONE", 104, 118);
+
+      const botZoneH = 360;
+      const botZoneY = TARGET_H - 80 - botZoneH;
+      targetCtx.fillStyle = "rgba(255, 255, 255, 0.04)";
+      targetCtx.fillRect(80, botZoneY, TARGET_W - 160, botZoneH);
+      targetCtx.strokeStyle = "rgba(251, 191, 36, 0.35)";
+      targetCtx.strokeRect(80, botZoneY, TARGET_W - 160, botZoneH);
+
+      targetCtx.fillStyle = "rgba(251, 191, 36, 0.8)";
+      targetCtx.fillText("AUTHOR NAME / FOOTER ZONE", 104, botZoneY + 38);
+
+      targetCtx.restore();
+    }
+
+    function renderCanvas() {
+      drawCompositeToContext(ctx, true);
+    }
+
+    // Build prepared reference canvas for OpenRouter
+    function buildPreparedCanvasDataURL(mode = "all") {
+      // For Ebook (5:8), use 1024x1638 portrait reference; for Paperback Wrap (~4:3 / 3:2), use 1600x1220 landscape reference
+      const refW = appMode === "ebook" ? 1024 : 1600;
+      const refH = Math.round(refW * (TARGET_H / TARGET_W));
+
+      const fullCanvas = document.createElement("canvas");
+      fullCanvas.width = TARGET_W;
+      fullCanvas.height = TARGET_H;
+      const fCtx = fullCanvas.getContext("2d");
+
+      // 1. Fill background with a soft mirrored/blurred color scaffolding from the front cover
+      fCtx.save();
+      fCtx.filter = "blur(48px) brightness(0.92)";
+      if (appMode === "paperback") {
+        // Mirror the front cover horizontally across the left side so the palette transitions naturally at the spine!
+        fCtx.save();
+        fCtx.translate(imgX, 0);
+        fCtx.scale(-1, 1);
+        fCtx.drawImage(sourceImg, 0, imgY, imgX + 100, imgH);
+        fCtx.restore();
+      }
+      fCtx.drawImage(sourceImg, -80, -80, TARGET_W + 160, TARGET_H + 160);
+      fCtx.restore();
+
+      const splitY = Math.round(imgY + imgH / 2);
+
+      if (appMode === "ebook" && mode === "bottom_only" && aiTopLayerImg) {
+        fCtx.save();
+        fCtx.beginPath();
+        fCtx.rect(0, 0, TARGET_W, splitY);
+        fCtx.clip();
+        drawSingleAiImage(fCtx, aiTopLayerImg);
+        fCtx.restore();
+      }
+
+      if (appMode === "ebook" && mode === "top_only" && aiBottomLayerImg) {
+        fCtx.save();
+        fCtx.beginPath();
+        fCtx.rect(0, splitY, TARGET_W, TARGET_H - splitY);
+        fCtx.clip();
+        drawSingleAiImage(fCtx, aiBottomLayerImg);
+        fCtx.restore();
+      }
+
+      // Draw crisp original cover at its exact coordinates
+      fCtx.drawImage(sourceImg, imgX, imgY, imgW, imgH);
+
+      const prepCanvas = document.createElement("canvas");
+      prepCanvas.width = refW;
+      prepCanvas.height = refH;
+      const pCtx = prepCanvas.getContext("2d");
+      pCtx.drawImage(fullCanvas, 0, 0, refW, refH);
+
+      return prepCanvas.toDataURL("image/jpeg", 0.92);
+    }
+
+    function showStatus(msg, loading = true, autoHideMs = 0, isError = false) {
+      if (statusTimeoutId) {
+        clearTimeout(statusTimeoutId);
+        statusTimeoutId = null;
+      }
+      statusBanner.classList.remove("hidden");
+      statusBanner.classList.toggle("error", isError);
+      statusSpinner.style.display = loading ? "block" : "none";
+      statusCloseBtn.style.display = isError ? "inline-flex" : "none";
+      statusMessage.textContent = msg;
+      if (autoHideMs > 0 && !isError) {
+        statusTimeoutId = setTimeout(() => {
+          statusBanner.classList.add("hidden");
+        }, autoHideMs);
+      }
+    }
+
+    function renderHistoryBar() {
+      if (historyItems.length === 0) {
+        historyList.innerHTML = `<span class="hint-text">Your generated versions will appear here so you can compare or restore attempts.</span>`;
+        return;
+      }
+
+      historyList.innerHTML = "";
+      historyItems.forEach((item, idx) => {
+        const card = document.createElement("div");
+        card.className = `history-item ${idx === activeHistoryIndex ? "active" : ""}`;
+        const mixButtonsHtml = appMode === "ebook" ? `
+          <div style="display:flex; gap:4px; margin-top:2px;">
+            <button class="use-top-btn" style="padding:2px 5px; font-size:10px;" title="Use ONLY the Top expansion from this attempt">Use Top</button>
+            <button class="use-bot-btn" style="padding:2px 5px; font-size:10px;" title="Use ONLY the Bottom expansion from this attempt">Use Bottom</button>
+          </div>
+        ` : "";
+
+        card.innerHTML = `
+          <img class="history-thumb" src="${item.thumbUrl}" alt="Attempt ${idx + 1}" />
+          <div class="history-meta">
+            <strong>#${idx + 1} (${item.label})</strong>
+            <span>Click to view</span>
+            ${mixButtonsHtml}
+          </div>
+        `;
+
+        card.addEventListener("click", (e) => {
+          if (e.target.classList.contains("use-top-btn")) {
+            e.stopPropagation();
+            aiTopLayerImg = item.topImg;
+            setViewMode("result");
+            showStatus(`Applied Top half from Attempt #${idx + 1}`, false, 2500);
+            return;
+          }
+          if (e.target.classList.contains("use-bot-btn")) {
+            e.stopPropagation();
+            aiBottomLayerImg = item.bottomImg;
+            setViewMode("result");
+            showStatus(`Applied Bottom half from Attempt #${idx + 1}`, false, 2500);
+            return;
+          }
+          activeHistoryIndex = idx;
+          aiTopLayerImg = item.topImg;
+          aiBottomLayerImg = item.bottomImg;
+          setViewMode("result");
+          renderHistoryBar();
+        });
+
+        historyList.appendChild(card);
+      });
+    }
+
+    async function runExpansion(mode = "all") {
+      if (!sourceImg) return;
+
+      const selectedModel = modelSelect.value === "custom"
+        ? customModelInput.value.trim()
+        : modelSelect.value;
+
+      if (!selectedModel) {
+        alert("Please enter a valid OpenRouter Model ID.");
+        return;
+      }
+
+      const topNotes = topPromptInput.value.trim();
+      const bottomNotes = bottomPromptInput.value.trim();
+      let promptParts = [];
+      let requestAspectRatio = "2:3";
+
+      if (appMode === "paperback") {
+        // Choose closest landscape aspect ratio supported by GPT Image 2.5 Sunburst ("4:3" = 1.333, "3:2" = 1.50)
+        const wrapRatio = TARGET_W / TARGET_H;
+        requestAspectRatio = Math.abs(wrapRatio - 1.333) < Math.abs(wrapRatio - 1.5) ? "4:3" : "3:2";
+
+        const rightGap = Math.max(0, Math.round(TARGET_W - (imgX + imgW)));
+        const topGapPb = Math.max(0, Math.round(imgY));
+        const botGapPb = Math.max(0, Math.round(TARGET_H - (imgY + imgH)));
+        let extraEdges = [];
+        if (rightGap > 4) extraEdges.push(`right edge (${rightGap}px)`);
+        if (topGapPb > 4) extraEdges.push(`top edge (${topGapPb}px)`);
+        if (botGapPb > 4) extraEdges.push(`bottom edge (${botGapPb}px)`);
+
+        promptParts = [
+          `Outpaint and seamlessly expand this full paperback book cover wrap across the entire horizontal frame.`,
+          `Keep the sharp Front Cover artwork on the right side in its exact position without altering the characters, faces, or existing front cover typography.`,
+          `Replace the blurred left half (the book spine and left back cover)${extraEdges.length ? ` as well as the ${extraEdges.join(", ")}` : ""} with a natural, continuous atmospheric extension of the background environment, lighting, color palette, and painterly style from the front cover.`,
+          `Keep the back cover background visually balanced and uncluttered so back-cover blurb text can be read over it, and do not generate any new text, lettering, fake barcodes, or borders on the spine, back cover, or expanded margins.`
+        ];
+        if (topNotes) {
+          promptParts.push(`Additional spine & back cover scene instructions: ${topNotes}`);
+        }
+      } else {
+        requestAspectRatio = "2:3";
+        const topGap = Math.max(0, Math.round(imgY));
+        const bottomGap = Math.max(0, Math.round(TARGET_H - (imgY + imgH)));
+
+        promptParts = [
+          `Outpaint and seamlessly expand this vertical book cover illustration to fill the full portrait frame.`,
+          `Keep the existing sharp artwork, characters, faces, lighting, and composition in their exact position without altering them.`
+        ];
+
+        if (mode === "bottom_only") {
+          promptParts.push(
+            `The top and middle of the image are already complete—do not change them.`,
+            `Focus exclusively on replacing the blurred bottom ${bottomGap} pixels at the bottom edge with a natural, continuous downward extension of the scene, matching the exact brushwork, lighting, and atmosphere.`
+          );
+          if (bottomNotes) promptParts.push(`Bottom area scene instructions: ${bottomNotes}`);
+        } else if (mode === "top_only") {
+          promptParts.push(
+            `The middle and bottom of the image are already complete—do not change them.`,
+            `Focus exclusively on replacing the blurred top ${topGap} pixels at the top edge with a natural, continuous upward extension of the scene, matching the exact brushwork, lighting, and atmosphere.`
+          );
+          if (topNotes) promptParts.push(`Top area scene instructions: ${topNotes}`);
+        } else {
+          if (topGap > 0 && bottomGap > 0) {
+            promptParts.push(`Replace the blurred padding at the top (${topGap}px) and bottom (${bottomGap}px) with a natural, continuous extension of the scene.`);
+          } else if (topGap > 0) {
+            promptParts.push(`Replace the blurred padding at the top (${topGap}px) with a natural, continuous upward extension of the scene.`);
+          } else if (bottomGap > 0) {
+            promptParts.push(`Replace the blurred padding at the bottom (${bottomGap}px) with a natural, continuous downward extension of the scene.`);
+          }
+          if (topNotes) promptParts.push(`Top area instructions: ${topNotes}`);
+          if (bottomNotes) promptParts.push(`Bottom area instructions: ${bottomNotes}`);
+        }
+        promptParts.push(`Do not add any text, titles, borders, or watermarks.`);
+      }
+
+      const fullPrompt = promptParts.join(" ");
+      const preparedCanvasB64 = buildPreparedCanvasDataURL(mode);
+
+      generateBtn.disabled = true;
+      redoBottomOnlyBtn.disabled = true;
+      redoTopOnlyBtn.disabled = true;
+
+      const modeLabel = appMode === "paperback"
+        ? "Paperback Wrap Expansion"
+        : mode === "bottom_only"
+          ? "Redoing Bottom Only (Top Locked)"
+          : mode === "top_only"
+            ? "Redoing Top Only (Bottom Locked)"
+            : "Full Expansion";
+
+      showStatus(`${modeLabel} with ${selectedModel}... (15–35s)`, true);
+
+      try {
+        const res = await fetch("/api/expand", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: selectedModel,
+            prompt: fullPrompt,
+            aspect_ratio: requestAspectRatio,
+            quality: "high",
+            input_references: [preparedCanvasB64]
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          const detailMsg = data.details ? JSON.stringify(data.details) : (data.error || "Unknown error");
+          throw new Error(detailMsg);
+        }
+
+        if (!data.data || !data.data[0] || !data.data[0].b64_json) {
+          throw new Error("No image returned in response.");
+        }
+
+        const b64 = data.data[0].b64_json;
+        const mediaType = data.data[0].media_type || "image/png";
+        const dataUrl = `data:${mediaType};base64,${b64}`;
+
+        const resultImg = new Image();
+        resultImg.onload = () => {
+          if (appMode === "ebook" && mode === "bottom_only") {
+            if (!aiTopLayerImg) aiTopLayerImg = resultImg;
+            aiBottomLayerImg = resultImg;
+          } else if (appMode === "ebook" && mode === "top_only") {
+            aiTopLayerImg = resultImg;
+            if (!aiBottomLayerImg) aiBottomLayerImg = resultImg;
+          } else {
+            aiTopLayerImg = resultImg;
+            aiBottomLayerImg = resultImg;
+          }
+
+          aiVerticalOffset = 0;
+          aiOffsetSlider.value = 0;
+          aiOffsetLabel.textContent = "0 px";
+          aiAlignRow.style.display = "flex";
+
+          viewResultBtn.disabled = false;
+          viewRawAiBtn.disabled = false;
+          downloadPngBtn.disabled = false;
+          downloadJpgBtn.disabled = false;
+          downloadRawAiBtn.disabled = false;
+          downloadKdpPdfBtn.disabled = false;
+          updatePartialRedoButtons();
+
+          setViewMode("result");
+
+          historyItems.push({
+            label: appMode === "paperback" ? "Wrap Expand" : (mode === "bottom_only" ? "Bottom Redo" : mode === "top_only" ? "Top Redo" : "Full Expand"),
+            topImg: aiTopLayerImg,
+            bottomImg: aiBottomLayerImg,
+            topDataUrl: aiTopLayerImg ? aiTopLayerImg.src : dataUrl,
+            bottomDataUrl: aiBottomLayerImg ? aiBottomLayerImg.src : dataUrl,
+            thumbUrl: dataUrl
+          });
+          activeHistoryIndex = historyItems.length - 1;
+          renderHistoryBar();
+
+          const costInfo = data.usage && data.usage.cost ? ` (Cost: $${Number(data.usage.cost).toFixed(4)})` : "";
+          showStatus(`${modeLabel} complete!${costInfo}`, false, 4500);
+        };
+        resultImg.src = dataUrl;
+
+      } catch (err) {
+        console.error(err);
+        showStatus(`Error: ${err.message}`, false, 0, true);
+      } finally {
+        generateBtn.disabled = false;
+        updatePartialRedoButtons();
+      }
+    }
+
+    generateBtn.addEventListener("click", () => runExpansion("all"));
+    redoBottomOnlyBtn.addEventListener("click", () => runExpansion("bottom_only"));
+    redoTopOnlyBtn.addEventListener("click", () => runExpansion("top_only"));
+
+    function getCleanCompositeDataURL(mime = "image/png", quality = 0.96) {
+      const exportCanvas = document.createElement("canvas");
+      exportCanvas.width = TARGET_W;
+      exportCanvas.height = TARGET_H;
+      const exportCtx = exportCanvas.getContext("2d");
+
+      const prevMode = viewMode;
+      if ((aiTopLayerImg || aiBottomLayerImg) && viewMode === "layout") {
+        viewMode = "result";
+      }
+      drawCompositeToContext(exportCtx, false);
+      viewMode = prevMode;
+
+      return exportCanvas.toDataURL(mime, quality);
+    }
+
+    function downloadCover(format) {
+      if (!sourceImg) return;
+      const mime = format === "jpg" ? "image/jpeg" : "image/png";
+      const ext = format === "jpg" ? "jpg" : "png";
+      const dataUrl = getCleanCompositeDataURL(mime, 0.96);
+
+      const suffix = appMode === "paperback"
+        ? `paperback_${kdpSpec.trim_w_in}x${kdpSpec.trim_h_in}_${kdpSpec.pages}p_${TARGET_W}x${TARGET_H}`
+        : `ebook_1600x2560`;
+
+      const link = document.createElement("a");
+      link.download = `${sourceFileName}_${suffix}.${ext}`;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    downloadPngBtn.addEventListener("click", () => downloadCover("png"));
+    downloadJpgBtn.addEventListener("click", () => downloadCover("jpg"));
+    downloadRawAiBtn.addEventListener("click", () => {
+      if (!aiTopLayerImg && !aiBottomLayerImg) return;
+      const exportCanvas = document.createElement("canvas");
+      exportCanvas.width = TARGET_W;
+      exportCanvas.height = TARGET_H;
+      const exportCtx = exportCanvas.getContext("2d");
+      drawCombinedAiLayers(exportCtx);
+      const dataUrl = exportCanvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = `${sourceFileName}_raw_ai_${TARGET_W}x${TARGET_H}.png`;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    downloadKdpPdfBtn.addEventListener("click", async () => {
+      if (!sourceImg) return;
+      showStatus("Generating 300 DPI Print-Ready PDF (with guide layer hidden)...", true);
+      try {
+        const cleanPngUrl = getCleanCompositeDataURL("image/png");
+        const res = await fetch("/api/export_print_pdf", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            image_data_url: cleanPngUrl,
+            filename: sourceFileName,
+            total_w_in: kdpSpec.total_w_in,
+            total_h_in: kdpSpec.total_h_in
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "PDF export failed");
+        const link = document.createElement("a");
+        const cleanTitle = (projectNameInput.value.trim() || sourceFileName || "Cover").replace(/\s+/g, "_");
+        link.download = `${kdpSpec.pages}p_${kdpSpec.trim_w_in}x${kdpSpec.trim_h_in}_KDP_Wrap_${cleanTitle}.pdf`;
+        link.href = data.pdf_data_url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showStatus(`Downloaded Print-Ready PDF: ${kdpSpec.total_w_in}" × ${kdpSpec.total_h_in}" (${data.dpi} DPI)!`, false, 5000);
+      } catch (err) {
+        showStatus(`PDF Export Error: ${err.message}`, false, 0, true);
+      }
+    });
+
+    // =========================================================================
+    // Project Save / Load / Export / Import
+    // =========================================================================
+
+    function buildProjectPayload(name) {
+      let compositeDataUrl = null;
+      if (aiTopLayerImg || aiBottomLayerImg) {
+        compositeDataUrl = getCleanCompositeDataURL("image/png");
+      }
+
+      return {
+        name: name || sourceFileName || "Untitled_Cover",
+        app_mode: appMode,
+        source_file_name: sourceFileName,
+        source_data_url: sourceImg ? sourceImg.src : null,
+        guide_data_url: kdpGuideImg ? kdpGuideImg.src : null,
+        composite_data_url: compositeDataUrl,
+        active_history_index: activeHistoryIndex,
+        state: {
+          appMode,
+          kdpSpec,
+          imgX,
+          imgY,
+          imgW,
+          imgH,
+          baseFitScale,
+          customZoom,
+          activePosPreset,
+          model: modelSelect.value,
+          customModel: customModelInput.value,
+          topPrompt: topPromptInput.value,
+          bottomPrompt: bottomPromptInput.value,
+          preserveOriginal: preserveOriginalCheck.checked,
+          feather: parseInt(featherSlider.value, 10),
+          aiVerticalOffset,
+          backHook: backHookInput.value,
+          backBlurb: backBlurbInput.value,
+          blurbFont: blurbFontSelect.value,
+          blurbAlign: blurbAlignSelect.value,
+          hookColor: hookColorInput.value,
+          blurbColor: blurbColorInput.value,
+          scrimColor: scrimColorInput.value,
+          hookSize: parseInt(hookSizeSlider.value, 10),
+          blurbSize: parseInt(blurbSizeSlider.value, 10),
+          lineHeight: parseInt(lineHeightSlider.value, 10),
+          blurbY: parseInt(blurbYSlider.value, 10),
+          scrimOpacity: parseInt(scrimOpacitySlider.value, 10),
+          textShadow: parseInt(textShadowSlider.value, 10),
+          spineTitle: spineTitleInput.value,
+          spineTitleColor: spineTitleColorInput.value,
+          spineTitlePos: parseInt(spineTitlePosSlider.value, 10),
+          spineSize: parseInt(spineSizeSlider.value, 10),
+          spineAuthor: spineAuthorInput.value,
+          spineAuthorColor: spineAuthorColorInput.value,
+          spineAuthorPos: parseInt(spineAuthorPosSlider.value, 10),
+          spineAuthorSize: parseInt(spineAuthorSizeSlider.value, 10),
+          spineNumber: spineNumberInput.value,
+          spineNumberColor: spineNumberColorInput.value,
+          spineNumberPos: parseInt(spineNumberPosSlider.value, 10),
+          spineNumberSize: parseInt(spineNumberSizeSlider.value, 10)
+        },
+        history: historyItems.map((h) => ({
+          label: h.label,
+          topDataUrl: h.topDataUrl || (h.topImg ? h.topImg.src : ""),
+          bottomDataUrl: h.bottomDataUrl || (h.bottomImg ? h.bottomImg.src : "")
+        }))
+      };
+    }
+
+    function loadImagePromise(src) {
+      return new Promise((resolve, reject) => {
+        if (!src) return resolve(null);
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = (e) => reject(e);
+        img.src = src;
+      });
+    }
+
+    async function restoreProjectData(data) {
+      showStatus(`Loading project "${data.name || "Cover"}"...`, true);
+      try {
+        const srcUrl = data.source_data_url;
+        if (!srcUrl) throw new Error("Project file does not contain a valid source image.");
+
+        const st = data.state || {};
+        const restoredMode = data.app_mode || st.appMode || "ebook";
+
+        if (st.kdpSpec) {
+          kdpSpec = st.kdpSpec;
+          if (data.guide_data_url) {
+            kdpSpec.guide_data_url = data.guide_data_url;
+          }
+          await applyKdpTemplateMeta(kdpSpec);
+        }
+
+        setAppMode(restoredMode);
+
+        sourceImg = await loadImagePromise(srcUrl);
+        sourceFileName = data.source_file_name || data.name || "cover";
+        projectNameInput.value = data.name || sourceFileName;
+
+        origDimText.textContent = `${sourceImg.width} × ${sourceImg.height}`;
+        sourceRatioBadge.textContent = detectRatioLabel(sourceImg.width, sourceImg.height);
+
+        baseFitScale = st.baseFitScale || (TARGET_W / sourceImg.width);
+        customZoom = st.customZoom || 100;
+        scaleSlider.value = customZoom;
+        scaleValLabel.textContent = `${customZoom}%`;
+
+        imgX = typeof st.imgX === "number" ? st.imgX : 0;
+        imgY = typeof st.imgY === "number" ? st.imgY : 0;
+        imgW = typeof st.imgW === "number" ? st.imgW : Math.round(sourceImg.width * baseFitScale);
+        imgH = typeof st.imgH === "number" ? st.imgH : Math.round(sourceImg.height * baseFitScale);
+
+        updatePositionButtons(st.activePosPreset || "custom");
+        if (st.model) modelSelect.value = st.model;
+        if (st.customModel) customModelInput.value = st.customModel;
+        customModelRow.style.display = modelSelect.value === "custom" ? "flex" : "none";
+
+        topPromptInput.value = st.topPrompt || "";
+        bottomPromptInput.value = st.bottomPrompt || "";
+        preserveOriginalCheck.checked = st.preserveOriginal !== false;
+        featherSlider.value = typeof st.feather === "number" ? st.feather : 48;
+        featherValLabel.textContent = `${featherSlider.value} px`;
+        aiVerticalOffset = st.aiVerticalOffset || 0;
+        aiOffsetSlider.value = aiVerticalOffset;
+        aiOffsetLabel.textContent = `${aiVerticalOffset > 0 ? "+" : ""}${aiVerticalOffset} px`;
+
+        backHookInput.value = st.backHook || "";
+        backBlurbInput.value = st.backBlurb || "";
+        if (st.blurbFont) blurbFontSelect.value = st.blurbFont;
+        if (st.blurbAlign) blurbAlignSelect.value = st.blurbAlign;
+        if (st.hookColor) hookColorInput.value = st.hookColor;
+        if (st.blurbColor) blurbColorInput.value = st.blurbColor;
+        if (st.scrimColor) scrimColorInput.value = st.scrimColor;
+        hookSizeSlider.value = st.hookSize || 42;
+        hookSizeVal.textContent = `${hookSizeSlider.value} px`;
+        blurbSizeSlider.value = st.blurbSize || 34;
+        blurbSizeVal.textContent = `${blurbSizeSlider.value} px`;
+        lineHeightSlider.value = st.lineHeight || 140;
+        lineHeightVal.textContent = `${(parseInt(lineHeightSlider.value, 10) / 100).toFixed(2)}×`;
+        blurbYSlider.value = st.blurbY || 230;
+        blurbYVal.textContent = `${blurbYSlider.value} px`;
+        scrimOpacitySlider.value = typeof st.scrimOpacity === "number" ? st.scrimOpacity : 55;
+        scrimVal.textContent = `${scrimOpacitySlider.value}%`;
+        textShadowSlider.value = typeof st.textShadow === "number" ? st.textShadow : 14;
+        shadowVal.textContent = `${textShadowSlider.value} px`;
+        spineTitleInput.value = st.spineTitle || "";
+        if (st.spineTitleColor) spineTitleColorInput.value = st.spineTitleColor;
+        spineTitlePosSlider.value = typeof st.spineTitlePos === "number" ? st.spineTitlePos : 32;
+        spineTitlePosVal.textContent = `${spineTitlePosSlider.value}%`;
+        spineSizeSlider.value = st.spineSize || 38;
+        spineSizeVal.textContent = `${spineSizeSlider.value} px`;
+        spineAuthorInput.value = st.spineAuthor || "";
+        if (st.spineAuthorColor) spineAuthorColorInput.value = st.spineAuthorColor;
+        spineAuthorPosSlider.value = typeof st.spineAuthorPos === "number" ? st.spineAuthorPos : 82;
+        spineAuthorPosVal.textContent = `${spineAuthorPosSlider.value}%`;
+        spineAuthorSizeSlider.value = st.spineAuthorSize || 32;
+        spineAuthorSizeVal.textContent = `${spineAuthorSizeSlider.value} px`;
+        spineNumberInput.value = st.spineNumber || "";
+        if (st.spineNumberColor) spineNumberColorInput.value = st.spineNumberColor;
+        spineNumberPosSlider.value = typeof st.spineNumberPos === "number" ? st.spineNumberPos : 93;
+        spineNumberPosVal.textContent = `${spineNumberPosSlider.value}%`;
+        spineNumberSizeSlider.value = st.spineNumberSize || 36;
+        spineNumberSizeVal.textContent = `${spineNumberSizeSlider.value} px`;
+
+        const rawHist = data.hydrated_history || data.history || [];
+        historyItems = [];
+        for (const h of rawHist) {
+          const topImg = await loadImagePromise(h.topDataUrl);
+          const botImg = h.bottomDataUrl === h.topDataUrl ? topImg : await loadImagePromise(h.bottomDataUrl);
+          if (topImg || botImg) {
+            historyItems.push({
+              label: h.label || "Saved Attempt",
+              topImg: topImg || botImg,
+              bottomImg: botImg || topImg,
+              topDataUrl: h.topDataUrl || h.bottomDataUrl,
+              bottomDataUrl: h.bottomDataUrl || h.topDataUrl,
+              thumbUrl: h.topDataUrl || h.bottomDataUrl
+            });
+          }
+        }
+
+        generateBtn.disabled = false;
+        saveProjectBtn.disabled = false;
+
+        if (historyItems.length > 0) {
+          const targetIdx = typeof data.active_history_index === "number" && data.active_history_index >= 0 && data.active_history_index < historyItems.length
+            ? data.active_history_index
+            : historyItems.length - 1;
+          activeHistoryIndex = targetIdx;
+          aiTopLayerImg = historyItems[targetIdx].topImg;
+          aiBottomLayerImg = historyItems[targetIdx].bottomImg;
+
+          viewResultBtn.disabled = false;
+          viewRawAiBtn.disabled = false;
+          downloadPngBtn.disabled = false;
+          downloadJpgBtn.disabled = false;
+          downloadRawAiBtn.disabled = false;
+          downloadKdpPdfBtn.disabled = false;
+          aiAlignRow.style.display = "flex";
+          setViewMode("result");
+        } else {
+          activeHistoryIndex = -1;
+          aiTopLayerImg = null;
+          aiBottomLayerImg = null;
+          setViewMode("layout");
+        }
+
+        updateGapSummary();
+        renderHistoryBar();
+        renderCanvas();
+        showStatus(`Loaded project "${data.name || sourceFileName}" (${historyItems.length} saved attempts)`, false, 4000);
+      } catch (err) {
+        console.error(err);
+        showStatus(`Failed to load project: ${err.message}`, false, 0, true);
+      }
+    }
+
+    function resetToBlankProject() {
+      sourceImg = null;
+      sourceFileName = "cover";
+      projectNameInput.value = "";
+      fileInput.value = "";
+      kdpFileInput.value = "";
+
+      aiTopLayerImg = null;
+      aiBottomLayerImg = null;
+      aiVerticalOffset = 0;
+      aiOffsetSlider.value = 0;
+      aiOffsetLabel.textContent = "0 px";
+      aiAlignRow.style.display = "none";
+
+      historyItems = [];
+      activeHistoryIndex = -1;
+      renderHistoryBar();
+
+      imgX = 0;
+      imgY = 0;
+      imgW = TARGET_W;
+      imgH = TARGET_H;
+      baseFitScale = 1;
+      customZoom = 100;
+      scaleSlider.value = 100;
+      scaleValLabel.textContent = "100%";
+      scaleFitWidthBtn.classList.add("active");
+      scaleContainBtn.classList.remove("active");
+      customScaleRow.style.display = "none";
+
+      origDimText.textContent = "—";
+      sourceRatioBadge.textContent = "None";
+
+      topPromptInput.value = "";
+      bottomPromptInput.value = "";
+      preserveOriginalCheck.checked = true;
+      featherControlRow.style.opacity = "1";
+      featherSlider.value = 48;
+      featherValLabel.textContent = "48 px";
+
+      backHookInput.value = "";
+      backBlurbInput.value = "";
+      blurbFontSelect.value = "'EB Garamond', Georgia, serif";
+      blurbAlignSelect.value = "left";
+      hookColorInput.value = "#fde68a";
+      blurbColorInput.value = "#f8fafc";
+      scrimColorInput.value = "#080a10";
+      hookSizeSlider.value = 42;
+      hookSizeVal.textContent = "42 px";
+      blurbSizeSlider.value = 34;
+      blurbSizeVal.textContent = "34 px";
+      lineHeightSlider.value = 140;
+      lineHeightVal.textContent = "1.40×";
+      blurbYSlider.value = 230;
+      blurbYVal.textContent = "230 px";
+      scrimOpacitySlider.value = 55;
+      scrimVal.textContent = "55%";
+      textShadowSlider.value = 14;
+      shadowVal.textContent = "14 px";
+
+      spineTitleInput.value = "";
+      spineTitleColorInput.value = "#fde68a";
+      spineTitlePosSlider.value = 32;
+      spineTitlePosVal.textContent = "32%";
+      spineSizeSlider.value = 38;
+      spineSizeVal.textContent = "38 px";
+
+      spineAuthorInput.value = "";
+      spineAuthorColorInput.value = "#f8fafc";
+      spineAuthorPosSlider.value = 82;
+      spineAuthorPosVal.textContent = "82%";
+      spineAuthorSizeSlider.value = 32;
+      spineAuthorSizeVal.textContent = "32 px";
+
+      spineNumberInput.value = "";
+      spineNumberColorInput.value = "#fde68a";
+      spineNumberPosSlider.value = 93;
+      spineNumberPosVal.textContent = "93%";
+      spineNumberSizeSlider.value = 56;
+      spineNumberSizeVal.textContent = "56 px";
+
+      viewResultBtn.disabled = true;
+      viewRawAiBtn.disabled = true;
+      downloadPngBtn.disabled = true;
+      downloadJpgBtn.disabled = true;
+      downloadRawAiBtn.disabled = true;
+      downloadKdpPdfBtn.disabled = true;
+      redoBottomOnlyBtn.disabled = true;
+      redoTopOnlyBtn.disabled = true;
+      generateBtn.disabled = true;
+      saveProjectBtn.disabled = true;
+
+      if (appMode === "ebook") {
+        updatePositionButtons("both");
+      } else {
+        posSnapRightTrimBtn.classList.add("active");
+        posSnapRightFullBleedBtn.classList.remove("active");
+        activePosPreset = "right_trim";
+      }
+
+      setViewMode("layout");
+      updateGapSummary();
+      renderCanvas();
+      showStatus("Started a fresh blank project!", false, 3000);
+    }
+
+    newProjectBtn.addEventListener("click", () => {
+      if (sourceImg && !confirm("Start a new blank project? Any unsaved changes on the current canvas will be cleared.")) {
+        return;
+      }
+      resetToBlankProject();
+    });
+
+    saveProjectBtn.addEventListener("click", () => {
+      if (!sourceImg) return;
+      if (!projectNameInput.value.trim()) {
+        projectNameInput.value = sourceFileName;
+      }
+      saveProjectModal.classList.remove("hidden");
+      projectNameInput.focus();
+    });
+
+    closeSaveModalBtn.addEventListener("click", () => saveProjectModal.classList.add("hidden"));
+
+    confirmSaveProjectBtn.addEventListener("click", async () => {
+      if (!sourceImg) return;
+      const name = projectNameInput.value.trim() || sourceFileName || "Untitled_Cover";
+      const payload = buildProjectPayload(name);
+      saveProjectModal.classList.add("hidden");
+      showStatus(`Saving project "${name}" to projects folder...`, true);
+
+      try {
+        const res = await fetch("/api/projects/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to save project");
+        showStatus(`Saved project "${data.name}" to projects/${data.slug}/`, false, 4500);
+      } catch (err) {
+        showStatus(`Save failed: ${err.message}`, false, 0, true);
+      }
+    });
+
+    exportProjectFileBtn.addEventListener("click", () => {
+      if (!sourceImg) return;
+      const name = projectNameInput.value.trim() || sourceFileName || "Untitled_Cover";
+      const payload = buildProjectPayload(name);
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `${name.replace(/\s+/g, "_")}.coverproj.json`;
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      saveProjectModal.classList.add("hidden");
+      showStatus(`Exported "${name}.coverproj.json"`, false, 3500);
+    });
+
+    openProjectBtn.addEventListener("click", async () => {
+      openProjectModal.classList.remove("hidden");
+      projectsListContainer.innerHTML = `<span class="hint-text">Loading saved projects...</span>`;
+      try {
+        const res = await fetch("/api/projects");
+        const data = await res.json();
+        const list = data.projects || [];
+        if (list.length === 0) {
+          projectsListContainer.innerHTML = `<div class="meta-bar"><span>No projects saved in <code>projects/</code> yet. Use <strong>💾 Save Project</strong> or import a <code>.coverproj.json</code> file below.</span></div>`;
+          return;
+        }
+        projectsListContainer.innerHTML = "";
+        list.forEach((p) => {
+          const modeTag = p.app_mode === "paperback" ? "📖 Paperback" : "📱 Ebook";
+          const row = document.createElement("div");
+          row.className = "meta-bar";
+          row.style.cursor = "pointer";
+          row.style.alignItems = "center";
+          row.innerHTML = `
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <strong style="font-size:13px;">${p.name} <span style="font-size:11px; color:var(--accent); margin-left:6px;">${modeTag}</span></strong>
+              <span style="font-size:11px; color:var(--text-muted);">Folder: projects/${p.slug}/ • ${p.attempt_count} attempt(s) • Saved ${p.updated_at}</span>
+            </div>
+            <button class="btn-primary" style="padding:6px 12px; font-size:12px;">Open</button>
+          `;
+          row.addEventListener("click", async () => {
+            openProjectModal.classList.add("hidden");
+            showStatus(`Opening "${p.name}"...`, true);
+            try {
+              const resProj = await fetch(`/api/projects/${encodeURIComponent(p.slug)}`);
+              const projData = await resProj.json();
+              if (!resProj.ok) throw new Error(projData.error || "Could not load project");
+              await restoreProjectData(projData);
+            } catch (e) {
+              showStatus(`Error opening project: ${e.message}`, false, 0, true);
+            }
+          });
+          projectsListContainer.appendChild(row);
+        });
+      } catch (err) {
+        projectsListContainer.innerHTML = `<span class="hint-text" style="color:var(--danger);">Error loading project list: ${err.message}</span>`;
+      }
+    });
+
+    closeOpenModalBtn.addEventListener("click", () => openProjectModal.classList.add("hidden"));
+    importProjectFileBtn.addEventListener("click", () => importProjectInput.click());
+    importProjectInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          openProjectModal.classList.add("hidden");
+          await restoreProjectData(data);
+        } catch (err) {
+          alert("Invalid .coverproj.json file: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+      importProjectInput.value = "";
+    });
+
+    // Startup initialization
+    fitViewport();
+    checkApiKey();
+    loadDefaultKdpTemplate();
+    renderCanvas();
+  </script>
+</body>
+</html>
